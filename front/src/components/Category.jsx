@@ -1,23 +1,11 @@
-
+// 2025년 12월 19일 금요일: 병합 충돌 (SyntaxError: Unexpected token) 해결 및 코드 구조 정리
 import React, { useState, useEffect } from 'react'
-=======
-
-import React, { useEffect, useState } from 'react'
 
 import { Row, Col, Container, Button } from 'react-bootstrap'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import styles from './Category.module.css';
 import { CATEGORY, CATEGORY_ORDER } from '../constants/category_name'
-
-
-// // 적어야할 것들
-// // 밑에 list.map에 navigate(`/product/${id}`) 라고 적었는데 다르면 수정하기 + img 경로
-
-// // Route path = "/category/:pet/:sub?" element = { <Category items={products} />} 여기서 ?는 있을 수도 없을 수도 있다
-
-
-=======
 
 
 // const Category= (prop) => { const items = prop.items; } 를 줄인 게 const Category = ({ item }) => {}
@@ -39,7 +27,6 @@ const Category = ({ items }) => {
             setProducts(items);
         }
     }, [items]);
-=======
 
 
     // ? : → 조건(삼항연산자), ?? → null/undefined 체크
@@ -48,12 +35,8 @@ const Category = ({ items }) => {
     const categoryName = sub ? CATEGORY[sub].label : null;
 
 
-    // products 상태를 기반으로 목록을 필터링합니다.
-    const list = (Array.isArray(products) ? products : [])
-=======
     // *** seed파일 나오고 데이터 생기면 safeitems를 items로 고치기
     const list = safeitems
-
         .filter(x => x.pet_type === pet)
         .filter(x => !sub || x.category === categoryName)
 
@@ -71,9 +54,6 @@ const Category = ({ items }) => {
             <div>
                 {/* localeCompare = 문자열 정렬을 위한 비교함수 (JS 기본기능) */}
                 <Button variant="light" onClick={() => {
-
-                    let copy = [...products]
-=======
                     let copy = [...sortlist]
 
                     copy.sort((a, b) => a.title.localeCompare(b.title))

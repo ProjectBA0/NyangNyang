@@ -1,0 +1,162 @@
+/**
+ * EventPage.module.css
+ * 2025년 12월 19일 금요일: EventPage 컴포넌트 스타일
+ */
+
+/* ----------------- Page Layout ----------------- */
+.page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.pageInner {
+  width: var(--page-width);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* ----------------- Banner ----------------- */
+.banner {
+  width: var(--content-width);
+  height: var(--banner-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background-color: rgba(255, 165, 0, 0.1); /* 주황색 계열 */
+  margin: 0 auto;
+}
+
+.bannerInner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.bannerTitle {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ----------------- Event Grid ----------------- */
+.gridSection {
+  width: var(--grid-w);
+  height: var(--grid-h);
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  background-color: rgba(75, 0, 130, 0.05); /* 인디고색 계열 */
+}
+
+.grid {
+  width: var(--grid-w);
+  height: var(--grid-h);
+  display: grid;
+  grid-template-columns: var(--card-w) var(--card-w);
+  column-gap: var(--grid-gap);
+  row-gap: var(--grid-gap);
+  align-content: start;
+  box-sizing: border-box;
+}
+
+.card {
+  width: var(--card-w);
+  height: var(--card-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  background-color: rgba(139, 69, 19, 0.1); /* 갈색 계열 */
+}
+
+/* ----------------- Footer ----------------- */
+/* 공통 Footer 스타일은 App.css에서 관리되므로 여기서는 구조적 보완만 수행 */
+
+.footerInner {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 24px;
+  box-sizing: border-box;
+  align-items: start;
+}
+
+.footerCol {
+  box-sizing: border-box;
+}
+
+.footerTitle {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.footerLine {
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+/* ----------------- [임시] 레이아웃 확인용 스타일 ----------------- */
+/* 이 스타일들은 레이아웃 검증 후 삭제될 예정입니다. */
+
+.banner, .gridSection, .card, .footer {
+  position: relative; /* 가상 요소(::before)의 위치 기준점 */
+  font-weight: bold;
+  font-size: 18px;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+/* 나머지 박스들 (우측 하단) */
+.banner::before,
+.card::before,
+.footer::before {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 4px 8px;
+  background-color: rgba(255, 255, 0, 0.3);
+  color: black;
+  border-radius: 3px 0 0 0;
+  font-size: 12px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* Grid Section 예외 처리 (좌측 상단) */
+.gridSection::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 4px 8px;
+  background-color: rgba(255, 255, 0, 0.3);
+  color: black;
+  border-radius: 0 0 3px 0;
+  font-size: 12px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.banner { background-color: rgba(255, 165, 0, 0.1); }
+.banner::before { content: 'Banner (W:1200, H:100)'; }
+
+.gridSection { background-color: rgba(75, 0, 130, 0.05); }
+.gridSection::before { content: 'Grid Section (W:1200, H:1420)'; }
+
+.card { background-color: rgba(139, 69, 19, 0.1); }
+.card::before { content: 'Card (W:570, H:310)'; }
+
+.footer { background-color: rgba(0, 128, 0, 0.1); }
+.footer::before { content: 'Footer (W:1200, H:200)'; }
+
+/* 
+ * Last Updated: 2025-12-19
+ * - 이벤트 페이지 전용 섹션(Banner, Grid, Card) 고유 색상 및 디버그 라벨 적용.
+ */

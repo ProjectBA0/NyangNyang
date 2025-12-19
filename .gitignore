@@ -11,6 +11,7 @@ back/instance/
 # ===== Crawling / Generated =====
 back/crawled_data/
 logs/
+.gemini/
 *.log
 *.csv
 *.json
