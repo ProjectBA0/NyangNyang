@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import EventPage from "./pages/EventPage";
 import MainPage from "./pages/MainPage";
+import CustomerCenterPage from "./pages/CustomerCenterPage";
 import { Route, Routes } from "react-router-dom";
 import Chatbot from "./components/Chatbot";
 
@@ -30,6 +31,7 @@ function MainLayout() {
         <Route path="/category/:pet/:sub?" element={<Category items={products} />} />
         <Route path="/form" element={<PostForm />} />
         <Route path="/event" element={<EventPage />} />
+        <Route path="/customer-center" element={<CustomerCenterPage />} />
         {/* Add a default route for MainLayout if needed, e.g., for a homepage */}
         <Route path="/" element={<MainPage />} />
       </Routes>
