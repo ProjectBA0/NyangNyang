@@ -19,7 +19,7 @@ function MainLayout() {
     <div className="MainLayout">
       <Navbar />
       <Routes>
-        <Route path="/category/:pet/:sub?" element={<Category items={products} />} />
+        <Route path="/category/:pet/:sub?" element={<PostForm />} />
         <Route path="/form" element={<PostForm />} />
         <Route path="/find-account" element={<FindAccount />} />
       </Routes>
