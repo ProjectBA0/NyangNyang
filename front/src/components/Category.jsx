@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // 2025년 12월 19일 금요일: 병합 충돌 (SyntaxError: Unexpected token) 해결 및 코드 구조 정리
 import React, { useState, useEffect } from 'react'
 
@@ -9,40 +10,109 @@ import { CATEGORY, CATEGORY_ORDER } from '../constants/category_name'
 
 
 // const Category= (prop) => { const items = prop.items; } 를 줄인 게 const Category = ({ item }) => {}
+=======
+// front/src/pages/Category.jsx
+import React, { useEffect, useMemo, useState } from "react";
+import { Row, Col, Container, Button, Pagination, Spinner, Alert } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
 
-const Category = ({ items }) => {
-    const [products, setProducts] = useState([]);
-    const { pet, sub } = useParams();
-    const [sortlist, setSortList] = useState([]);
-
-    // *** 아직 seed파일이 없으니까 items를 못 받아와서 에러방지용 safeitem
-    const safeitems = Array.isArray(items) ? items : [];
-
-    const navigate = useNavigate();
+import styles from "./Category.module.css";
+import { CATEGORY, CATEGORY_ORDER } from "../constants/category_name";
+import { fetchProducts } from "../api/productApi";
 
 
+// 페이지당 보여줄 개수(= 백에 요청할 limit)
+const PER_PAGE = 12;
+
+// 페이지 버튼을 몇 개 묶어서 보여줄지 (1~10, 11~20 이런 식)
+const PAGE_GROUP = 10;
+
+const Category = () => {
+  // URL 파라미터 가져오기
+  const { pet, sub } = useParams();
+  const navigate = useNavigate();
+
+  // 화면에 보여줄 실제 상품 목록(= 백에서 받아온 현재 페이지 items)
+  const [items, setItems] = useState([]);
+
+  // 현재 페이지 번호
+  const [page, setPage] = useState(1);
+
+  // 전체 상품 수 
+  const [total, setTotal] = useState(0);
+>>>>>>> 6cc517ca74e60226b9ac4d6196dea2cb9c99a954
+
+  // usestate 값은 기본으로 어떻게 정렬할지
+  const [sort, setSort] = useState("id_desc");
+
+  // 로딩/에러 처리
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  // usememo 내가 입력한 값 현 코드에서는 pet의 값이 변할 때 마다 다시 실행
+  const categories = useMemo(() => {
+    return CATEGORY_ORDER?.[pet] ?? [];
+  }, [pet]);
+
+  // DB에서 필터링에 사용할 카테고리 값들을 “항상 배열 형태”로 만들어 주는 코드
+  const categoryName = useMemo(() => {
+    if (!sub) return [];
+    const db = CATEGORY?.[sub]?.db;
+    if (!db) return [];
+    return Array.isArray(db) ? db : [db];
+  }, [sub]);
+
+<<<<<<< HEAD
     useEffect(() => {
         // items prop이 배열일 경우에만 상태를 업데이트합니다.
         if (Array.isArray(items)) {
             setProducts(items);
         }
     }, [items]);
+=======
+  // totalPages(총 페이지 수)
+  // Math.ceil: 상품을 내가 한페이지마다 나타내는 수로 나누어 필요한 페이지를 계산
+  // 최소 1페이지는 보장(Math.max)
+  const totalPages = useMemo(() => {
+    return Math.max(1, Math.ceil(total / PER_PAGE));
+  }, [total]);
+>>>>>>> 6cc517ca74e60226b9ac4d6196dea2cb9c99a954
 
+  // 카테고리 같은 페이지를 처음으로 돌아가야하는 상황을 위해 밑에있는 상황에 처하면 페이지를 1로 바꾼다라고 설정해둔 값
+  useEffect(() => {
+    setPage(1);
+  }, [pet, sub, sort]);
 
-    // ? : → 조건(삼항연산자), ?? → null/undefined 체크
-    // CATEGORY_ORDER를 쓰고 order안에 없으면 [] 빈 문자열을 내보내라
-    const categories = CATEGORY_ORDER[pet] ?? []; // .map() 에러방지용 (pet이 잘못됐거나 url에 pet이 없을 때)
-    const categoryName = sub ? CATEGORY[sub].label : null;
+  //백에서 보내준 정보를 띄워주는 역활
+  useEffect(() => {
+    let alive = true; // 언마운트/요청 꼬임 방지 (setState 경고 방지용)
 
+    async function load() {
+      setLoading(true);
+      setError("");
 
+<<<<<<< HEAD
     // *** seed파일 나오고 데이터 생기면 safeitems를 items로 고치기
     const list = safeitems
         .filter(x => x.pet_type === pet)
         .filter(x => !sub || x.category === categoryName)
+=======
+      try {
+        const data = await fetchProducts({
+          pet_type: pet,                 // 백이 기대하는 key
+          category: categoryName.length ? categoryName : undefined, //categoryName배열에 값이 있으면 category에 보내고 비어있으면 보내지 말아라
+          page,                          // 현재 페이지
+          limit: PER_PAGE,               // 페이지당 개수
+          sort,                          // 정렬 키
+        });
 
-    // 기본값 세팅, 상태 동기화
-    useEffect(() => {setSortList(list);},[list])
+        if (!alive) return;
+>>>>>>> 6cc517ca74e60226b9ac4d6196dea2cb9c99a954
 
+        // items 안전 처리
+        setItems(Array.isArray(data.items) ? data.items : []);
+
+<<<<<<< HEAD
     return (
         <>
             {categories.length > 0 && <div className={`d-flex justify-content-between align-items-center ${styles.sub}`} >
@@ -55,47 +125,152 @@ const Category = ({ items }) => {
                 {/* localeCompare = 문자열 정렬을 위한 비교함수 (JS 기본기능) */}
                 <Button variant="light" onClick={() => {
                     let copy = [...sortlist]
+=======
+        // total 안전 처리
+        const newTotal = Number(data.total) || 0;
+        setTotal(newTotal);
 
-                    copy.sort((a, b) => a.title.localeCompare(b.title))
-                    setSortList(copy)
-                }}>이름순 정렬</Button> {' '}
-                <Button variant="light" onClick={() => {
-                    let copy = [...sortlist]
-                    copy.sort((a, b) => (a.views < b.views) ? 1 : -1)
-                    setSortList(copy)
-                }}>조회순</Button> {' '}
-                <Button variant="light" onClick={() => {
-                    let copy = [...sortlist]
-                    copy.sort((a, b) => (a.review_count < b.review_count) ? 1 : -1)
-                    setSortList(copy)
-                }}>리뷰 많은 순</Button> {' '}
-                <Button variant="light" onClick={() => {
-                    let copy = [...sortlist]
-                    copy.sort((a, b) => (a.price > b.price) ? 1 : -1)
-                    setSortList(copy)
-                }}>낮은 가격 순</Button> {' '}
-                <Button variant="light" onClick={() => {
-                    let copy = [...sortlist]
-                    copy.sort((a, b) => (a.price < b.price) ? 1 : -1)
-                    setSortList(copy)
-                }}>높은 가격 순</Button>
-            </div>
-            <Container>
-                <Row>
-                      {sortlist.map((item) =>
-                        <Col xl={5} sm={3} key={item.id} onClick={() => { navigate(`/product/${item.id}`) }} >
-                            {/* process.env.PUBLIC_URL = public 폴더 안 파일을 가져올 때 쓰는 절대경로 => react가 자동으로 올바름 public경로를 붙여줌
-                                ∵ 개발환경 / 배포환경에서 경로가 달라질 수 있기 때문 */}
-                            <img src={`${process.env.PUBLIC_URL}/item.imgUrl`} alt="상품이미지" />
-                            <h4>{item.title}</h4>
-                            <p>{item.price}</p>
-                        </Col>
-                    )}
-                </Row>
-            </Container>
-        </>
-    )
-}
+        // 만약 total이 줄어서 현재 page가 범위를 벗어나면 1로 리셋
+        // 
+        const pages = Math.max(1, Math.ceil(newTotal / PER_PAGE));
+        if (page > pages) setPage(1);
+      } catch (e) {
+        if (!alive) return;
+        setError("상품 목록을 불러오는 중 오류가 발생했습니다.");
+        setItems([]);
+        setTotal(0);
+      } finally {
+        if (alive) setLoading(false);
+      }
+    }
+>>>>>>> 6cc517ca74e60226b9ac4d6196dea2cb9c99a954
 
+    // pet이 없으면 요청할 필요가 없음 (URL이 깨진 경우)
+    if (!pet) return;
 
-export default Category
+    load();
+    return () => {
+      alive = false;
+    };
+  }, [pet, categoryName, page, sort]);
+
+  // start end 페이지를 계산
+  const startPage = Math.floor((page - 1) / PAGE_GROUP) * PAGE_GROUP + 1;
+  const endPage = Math.min(startPage + PAGE_GROUP - 1, totalPages);
+
+  //이미지 띄울때 링크처리
+  const getImageSrc = (item) => {
+    const url = item?.imgUrl?.trim();
+    return url ? url : `${process.env.PUBLIC_URL}/images/no-image.png`;
+  };
+
+  return (
+    <div className={styles.category}>
+      {/* 상단 서브카테고리 버튼 영역 (sub가 있는 경우에도 항상 보여주기 가능) */}
+      {categories.length > 0 && (
+        <div className={`d-flex justify-content-between align-items-center ${styles.sub}`}>
+          {categories.map((code) => (
+            <button
+              key={code}
+              // code는 URL sub로 들어감 (/dog/feed)
+              onClick={() => navigate(`/category/${pet}/${code}`)}
+              className={styles.sub_ctgr}
+            >
+              <img
+                src={CATEGORY[code].img}
+                alt={CATEGORY[code].label}
+                className={styles.icon}
+              />
+              <p>{CATEGORY[code].label}</p>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* 백에서 정한 정렬방식 이용 */}
+      <div>
+        
+        <Button variant="light" onClick={() => setSort("views_desc")}>조회순</Button>{" "}
+        <Button variant="light" onClick={() => setSort("price_asc")}>낮은 가격 순</Button>{" "}
+        <Button variant="light" onClick={() => setSort("price_desc")}>높은 가격 순</Button>{" "}
+        <Button variant="light" onClick={() => setSort("review_count_desc")}>리뷰 많은순</Button>{" "}
+        {/* 기본이 상품 고유아이디 번호 순이여서 리뷰 많은 순 으로 대체 하였음 아직 리뷰가 없어서 변별력은없음  */}
+      </div>
+
+      <Container className={styles.container}>
+        {/* 로딩 중 표시 */}
+        {loading && (
+          <div className="d-flex justify-content-center my-4">
+            <Spinner animation="border" />
+          </div>
+        )}
+
+        {/* 에러 표시 */}
+        {!loading && error && (
+          <Alert variant="danger" className="my-3">
+            {error}
+          </Alert>
+        )}
+
+        {/* 정상 렌더 */}
+        {!loading && !error && (
+          <>
+            <Row className="row-cols-3 row-cols-lg-4 g-3">
+              {items.map((item) => (
+                <Col
+                  className={styles.col}
+                  key={item.id}
+                  onClick={() => navigate(`/product/${item.id}`)}
+                >
+                  <img
+                    src={getImageSrc(item)}
+                    alt={item.title || "상품이미지"}
+                    loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.src = `${process.env.PUBLIC_URL}/images/no-image.png`;
+                    }}
+                  />
+                  <h5>{item.title}</h5>
+
+                  {/* toLocaleString: 12000 -> 12,000 */}
+                  <p>{Number(item.price).toLocaleString()}원</p>
+                </Col>
+              ))}
+            </Row>
+
+            {/* 페이지네이션 (페이지가 2 이상일 때만 표시) */}
+            {totalPages > 1 && (
+              <div className="d-flex justify-content-center mt-4">
+                <Pagination className={styles.page}>
+                  <Pagination.First onClick={() => setPage(1)} disabled={page === 1} />
+                  <Pagination.Prev
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    disabled={page === 1}
+                  />
+
+                  {/* startPage~endPage만큼만 번호 버튼 생성 */}
+                  {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((n) => (
+                    <Pagination.Item key={n} active={n === page} onClick={() => setPage(n)}>
+                      {n}
+                    </Pagination.Item>
+                  ))}
+
+                  <Pagination.Next
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={page === totalPages}
+                  />
+                  <Pagination.Last
+                    onClick={() => setPage(totalPages)}
+                    disabled={page === totalPages}
+                  />
+                </Pagination>
+              </div>
+            )}
+          </>
+        )}
+      </Container>
+    </div>
+  );
+};
+
+export default Category;

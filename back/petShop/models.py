@@ -80,6 +80,9 @@ class Product(db.Model):
     # 상품 카테고리 (사료, 간식, 장난감, 용품 등)
     category = db.Column(db.String(50), nullable=True)
 
+    # 상품 카테고리 (사료, 간식, 장난감, 용품 등)
+    sub_category = db.Column(db.String(50), nullable=True)
+
     # 대상 동물 (cat, dog, etc)
     pet_type = db.Column(db.String(10), nullable=True)
 
@@ -92,6 +95,24 @@ class Product(db.Model):
     # 리뷰 개수 (리뷰 작성 시 증가)
     review_count = db.Column(db.Integer, nullable=False, default=0)
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "content": self.content,
+            "price": self.price,
+
+            # 프론트가 item.imgUrl을 쓰고 있으니 imgUrl 키로 내려줌
+            "imgUrl": self.img_url,
+
+            "category": self.category,
+            "sub_category": self.sub_category,
+            "pet_type": self.pet_type,
+
+            "views": self.views,
+            "stock": self.stock,
+            "review_count": self.review_count,
+        }
 
 # ============================================
 # 3. QnA (문의 게시판)
@@ -305,3 +326,42 @@ class Pet(db.Model):
     # 선택: 품종, 몸무게 등 추가 가능
     breed = db.Column(db.String(50), nullable=True)
     weight = db.Column(db.Float, nullable=True)
+
+
+# ============================================
+# 8. Wishlist (찜 목록)
+# ============================================
+class Wishlist(db.Model):
+    __tablename__ = 'wishlist'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id', ondelete='CASCADE'),
+        nullable=False
+    )
+    user = db.relationship(
+        'User',
+        backref=db.backref('wishlists', lazy=True)
+    )
+
+    product_id = db.Column(
+        db.Integer,
+        db.ForeignKey('product.id', ondelete='CASCADE'),
+        nullable=False
+    )
+    product = db.relationship(
+        'Product',
+        backref=db.backref('wishlists', lazy=True)
+    )
+
+    created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+# ==============================================================================
+# [Gemini 작업 로그] - 2025.12.26
+# 1. Wishlist 모델 추가
+#    - User와 Product를 N:M 관계처럼 연결 (중간 테이블 역할)
+#    - user_id, product_id, created_date 필드 포함
+# ==============================================================================
+

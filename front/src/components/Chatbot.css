@@ -2,6 +2,7 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
+<<<<<<< HEAD
   z-index: 1000;
   display: flex;
   flex-direction: column;
@@ -12,19 +13,35 @@
   width: 150px; /* 고양이 이미지 크기 조절 */
   cursor: pointer;
   position: relative; /* 말풍선 위치 기준 */
+=======
+  z-index: 9999;
+}
+
+.cat-character {
+  cursor: pointer;
+  position: relative;
+  width: 120px; 
+  height: 120px;
+>>>>>>> 6cc517ca74e60226b9ac4d6196dea2cb9c99a954
 }
 
 .cat-character img {
   width: 100%;
+<<<<<<< HEAD
   transition: transform 0.2s ease-in-out;
 }
 
 .cat-character:hover img {
   transform: scale(1.1);
+=======
+  height: 100%;
+  object-fit: contain;
+>>>>>>> 6cc517ca74e60226b9ac4d6196dea2cb9c99a954
 }
 
 .chat-bubble {
   position: absolute;
+<<<<<<< HEAD
   bottom: 90%; /* 고양이 바로 위에 위치 */
   left: 50%;
   transform: translateX(-50%);
@@ -57,16 +74,70 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #e0e0e0;
+=======
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  white-space: nowrap;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.chat-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px 6px 0;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
+}
+
+.chat-window {
+  position: absolute;
+  bottom: 130px;
+  right: 0;
+  width: 320px;
+  height: 450px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #eee;
+}
+
+.chat-header {
+  background-color: #333;
+  color: #fff;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+>>>>>>> 6cc517ca74e60226b9ac4d6196dea2cb9c99a954
 }
 
 .close-btn {
   background: none;
   border: none;
+<<<<<<< HEAD
+=======
+  color: #fff;
+>>>>>>> 6cc517ca74e60226b9ac4d6196dea2cb9c99a954
   font-size: 18px;
   cursor: pointer;
 }
 
 .chat-body {
+<<<<<<< HEAD
   flex-grow: 1;
   padding: 15px;
   overflow-y: auto;
@@ -94,3 +165,42 @@
   border-radius: 20px;
   cursor: pointer;
 }
+=======
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  background-color: #f9f9f9;
+}
+
+.chat-input-area {
+  padding: 10px;
+  border-top: 1px solid #eee;
+  display: flex;
+  gap: 8px;
+  background-color: #fff;
+}
+
+.chat-input-area input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  outline: none;
+}
+
+.chat-input-area button {
+  padding: 8px 16px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* ==============================================================================
+   [Gemini 작업 로그] - 2025.12.26
+   1. 스타일 복구: 고양이 애니메이션 캐릭터 및 대화창 UI 스타일 정의.
+   2. 구성: Floating 버튼, Chat Window, 말풍선(Bubble) 애니메이션 대응.
+   ============================================================================== */
+>>>>>>> 6cc517ca74e60226b9ac4d6196dea2cb9c99a954

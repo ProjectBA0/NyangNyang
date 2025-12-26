@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // 2025년 12월 19일 금요일: 공통 Footer 컴포넌트 생성
 import React from 'react';
 
@@ -5,6 +6,12 @@ import React from 'react';
  * 전역 푸터 컴포넌트
  * - 회사 정보, 고객센터, 소셜 미디어 링크를 포함합니다.
  * - 스타일은 App.css에 정의된 전역 클래스를 사용합니다.
+=======
+import React from 'react';
+
+/**
+ * [Base Version] Footer Component
+>>>>>>> 6cc517ca74e60226b9ac4d6196dea2cb9c99a954
  */
 function Footer() {
   return (
@@ -12,6 +19,7 @@ function Footer() {
       <div className="footer-inner">
         <div className="footer-col">
           <div className="footer-title">COMPANY INFO</div>
+<<<<<<< HEAD
           <div className="footer-line">—</div>
           <div className="footer-line">회사명: (주)다잇다냥 | 대표자: Nyang</div>
           <div className="footer-line">주소: 경기도 어디구 고양이로 22</div>
@@ -42,6 +50,14 @@ function Footer() {
               <span className="social-icon">📝</span>
               <span>Naver Blog</span>
             </div>
+=======
+          <div className="footer-line">회사명: (주)다잇다냥 | 대표자: danayang3</div>
+        </div>
+        <div className="footer-col">
+          <div className="footer-title">SOCIAL</div>
+          <div className="social-icons">
+            <span>📸 Instagram</span> <span>📺 YouTube</span>
+>>>>>>> 6cc517ca74e60226b9ac4d6196dea2cb9c99a954
           </div>
         </div>
       </div>
@@ -51,7 +67,16 @@ function Footer() {
 
 export default Footer;
 
+<<<<<<< HEAD
 /* 
  * Last Updated: 2025-12-19
  * - 전역 공통 Footer 컴포넌트 통합.
  */
+=======
+/* =========================================================================
+ *  2025-12-24: 수정 및 추가 내역 (Team History)
+ * -------------------------------------------------------------------------
+ * - 작성자: danayang3
+ * - 내용: 전역 공통 Footer 복구. 1200px 규격 및 소셜 섹션 포함.
+ * ========================================================================= */
+>>>>>>> 6cc517ca74e60226b9ac4d6196dea2cb9c99a954
