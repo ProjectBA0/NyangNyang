@@ -82,7 +82,7 @@
 }
 
 .cartButtons {
-  margin-top: 30px;
+  margin-top: 70px;
   display: flex;
   justify-content: center;
   gap: 20px;
@@ -91,7 +91,7 @@
 .buyBtn {
   width: 140px;
   height: 42px;
-  border: 2px solid hotpink;
+  border: 2px solid gray;
   background: white;
   font-weight: 700;
   cursor: pointer;
