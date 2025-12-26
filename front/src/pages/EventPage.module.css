@@ -1,0 +1,82 @@
+/**
+ * EventPage.module.css
+ * 2025-12-24: 루트 폴더 스타일 복구 및 1200px 규격 최적화
+ */
+
+.page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.pageInner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.banner {
+  width: var(--content-width);
+  height: var(--banner-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background-color: rgba(255, 165, 0, 0.1);
+  margin: 0 auto;
+}
+
+.bannerTitle {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.gridSection {
+  width: var(--content-width);
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  background-color: rgba(75, 0, 130, 0.05);
+  margin: 0 auto;
+}
+
+.grid {
+  width: var(--content-width);
+  display: grid;
+  grid-template-columns: var(--card-w) var(--card-w);
+  column-gap: var(--grid-gap);
+  row-gap: var(--grid-gap);
+  padding: 40px 0;
+  box-sizing: border-box;
+}
+
+.card {
+  width: var(--card-w);
+  height: var(--card-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  background-color: rgba(139, 69, 19, 0.1);
+  position: relative;
+}
+
+/* ----------------- [임시] 디버그 라벨 ----------------- */
+.card::before {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 4px 8px;
+  background-color: rgba(255, 255, 0, 0.3);
+  color: black;
+  font-size: 10px;
+  z-index: 9999;
+  pointer-events: none;
+  content: 'Card (W:570, H:310)';
+}

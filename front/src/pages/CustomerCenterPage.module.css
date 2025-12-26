@@ -1,0 +1,126 @@
+/**
+ * CustomerCenterPage.module.css
+ * 2025-12-24: 루트 폴더 스타일 복구 및 CSS Grid 기반 정렬 시스템 적용
+ */
+
+.page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.pageInner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.title {
+  width: var(--content-width);
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 40px 0;
+}
+
+/* 안내 박스 */
+.infoBoxContainer {
+  width: var(--content-width);
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.infoBox {
+  width: var(--info-box-w);
+  height: var(--info-box-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.6;
+  padding: 20px;
+  background-color: rgba(0, 123, 255, 0.1);
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* 바 공통 스타일 */
+.categoryBar, .searchBar {
+  width: var(--content-width);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.categoryBar {
+  height: var(--category-bar-h);
+  background-color: rgba(255, 193, 7, 0.15);
+  font-size: 20px;
+}
+
+.searchBar {
+  height: var(--search-bar-h);
+  background-color: rgba(40, 167, 69, 0.1);
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+/* 게시판 영역 (Grid) */
+.boardContainer {
+  width: var(--content-width);
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(108, 117, 125, 0.05);
+  box-sizing: border-box;
+  position: relative;
+}
+
+.boardGrid {
+  display: grid;
+  grid-template-columns: 80px 1fr 150px;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.tableHead {
+  border-bottom: 2px solid #333;
+  padding: 15px 0;
+  background-color: rgba(0, 0, 0, 0.02);
+  font-weight: 700;
+}
+
+.tableRow {
+  border-bottom: 1px solid #eee;
+  padding: 15px 0;
+}
+
+/* ----------------- [임시] 디버그 라벨 ----------------- */
+.infoBox::before, .categoryBar::before, .searchBar::before, .boardContainer::before {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 2px 6px;
+  background-color: rgba(0, 255, 255, 0.3);
+  color: black;
+  font-size: 10px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.infoBox::before { content: 'Info Box (W:520, H:320)'; }
+.categoryBar::before { content: 'Category Bar (W:1200, H:60)'; }
+.searchBar::before { content: 'Board Search (W:1200, H:50)'; }
+.boardContainer::before { content: 'Board Container (W:1200)'; }
