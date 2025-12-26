@@ -35,6 +35,9 @@ import MainPage from "./pages/MainPage"; // 2025-12-24: 메인 페이지 복구
 import EventPage from "./pages/EventPage"; // 2025-12-24: 이벤트 페이지 복구
 import CustomerCenterPage from "./pages/CustomerCenterPage"; // 2025-12-24: 고객센터 페이지 복구
 import Chatbot from "./components/Chatbot"; // 2025-12-24: 챗봇 복구
+import Noticeboard from "./components/Noticeboard";
+import Order from "./components/Order";
+
 
 /** ✅ 네비바가 필요한 페이지들의 공통 틀 */
 function MainLayout() {
@@ -73,7 +76,8 @@ export default function App() {
           <Route path="/small" element={<Category pet="small" />} />
           <Route path="/events" element={<EventPage />} /> {/* Navbar의 /events와 매핑 */}
           <Route path="/support" element={<CustomerCenterPage />} /> {/* Navbar의 /support와 매핑 */}
-          
+          <Route path="/Noticeboard" element={<Noticeboard />} />
+          <Route path="/order" element={<Order />} />
 
           {/* ✅ 마이페이지 */}
           <Route path="mypage" element={<MyPageLayout />}>
