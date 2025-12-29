@@ -71,9 +71,6 @@ export default function App() {
           <Route path="find-account" element={<FindAccount />} />
           <Route path="cart" element={<CartPage />} />
           <Route path="order/complete" element={<OrderComplete />} />
-          <Route path="/dog" element={<Category pet="dog" />} />
-          <Route path="/cat" element={<Category pet="cat" />} />
-          <Route path="/small" element={<Category pet="small" />} />
           <Route path="/events" element={<EventPage />} /> {/* Navbar의 /events와 매핑 */}
           <Route path="/support" element={<CustomerCenterPage />} /> {/* Navbar의 /support와 매핑 */}
           <Route path="/Noticeboard" element={<Noticeboard />} />
