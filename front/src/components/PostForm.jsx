@@ -1,108 +1,126 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./PostForm.module.css";
 
-// 📌 localStorage에 저장될 게시글 목록 키
 const STORAGE_KEY = "notice_posts";
 
 export default function PostForm() {
-  // 📌 페이지 이동을 위한 navigate 함수
   const navigate = useNavigate();
 
-  // 📌 제목 입력값 상태
   const [title, setTitle] = useState("");
+  const [writer, setWriter] = useState("");
 
-  // 📌 내용 입력값 상태
+  // 🔴 이메일 분리 상태
+  const [emailId, setEmailId] = useState("");
+  const [emailDomain, setEmailDomain] = useState("");
+
   const [content, setContent] = useState("");
-
-  // 📌 첨부파일 상태 (파일 객체 저장)
   const [attachment, setAttachment] = useState(null);
 
-  /**
-   * 📌 게시글 등록 처리 함수
-   * - form 제출 시 실행
-   * - 기본 submit 동작(페이지 새로고침) 방지
-   * - localStorage에 새 게시글 저장
-   */
+  useEffect(() => {
+    setContent(
+`안녕하세요 입점관련 문의남겨주시면 확인 후에 연락드리도록 하겠습니다.
+관련 자료(상세페이지 등) 파일 첨부 부탁드립니다.
+감사합니다.
+
+1) 업체명 :
+2) 담당자 :
+3) 연락처 :
+4) 이메일 :
+5) 상품군 및 상품설명 :
+6) 제조원 :
+7) 판매원 :
+8) 수입원 :
+9) 판매처링크 : 온라인 판매처 기입 생략 및 관련 자료 첨부`
+    );
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // 📌 기존 게시글 목록 불러오기
+    const email = `${emailId}@${emailDomain}`;
+
     const savedPosts =
       JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 
-    // 📌 오늘 날짜를 YYYY-MM-DD 형식으로 생성
     const today = new Date().toISOString().slice(0, 10);
 
-    // 📌 새 게시글 객체 생성
     const newPost = {
-      id: Date.now(),          // 고유 id (타임스탬프 사용)
-      title,                  // 게시글 제목
-      content,                // 게시글 내용
-      writer: "관리자",        // 작성자 (고정)
-      date: today,            // 작성일
-      view: 0,                // 조회수 초기값
-      attachmentName: attachment ? attachment.name : null, // 첨부파일 이름
+      id: Date.now(),
+      title,
+      writer,
+      email,
+      content,
+      date: today,
+      view: 0,
+      attachmentName: attachment ? attachment.name : null,
     };
 
-    /**
-     * 📌 새 글을 목록 맨 앞에 추가
-     * - 최신 글이 항상 위에 보이도록 처리
-     */
-    const updatedPosts = [newPost, ...savedPosts];
-
-    // 📌 localStorage에 저장
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify(updatedPosts)
+      JSON.stringify([newPost, ...savedPosts])
     );
 
-    // 📌 등록 완료 후 게시판 목록 페이지로 이동
+    alert("문의가 등록되었습니다.");
     navigate("/Noticeboard");
   };
 
   return (
     <div className={styles.container}>
-      {/* 📌 페이지 제목 */}
-      <h2 className={styles.title}>새 게시글 작성</h2>
+      <div className={styles.notice}>
+        입점 문의 공지사항입니다. <br />
+        회원 인증 요청 시 확인 안내드리지 않으니 참고 부탁드립니다.
+      </div>
 
-      {/* 📌 게시글 작성 폼 */}
       <form className={styles.form} onSubmit={handleSubmit}>
-        {/* 📌 제목 입력 영역 */}
-        <div className={styles.field}>
+        <div className={styles.row}>
           <label>제목</label>
-          <input
-            type="text"
-            value={title} // 상태값과 연결
-            onChange={(e) => setTitle(e.target.value)} // 입력 시 상태 변경
-            required // 빈 값 제출 방지
-          />
+          <input value={title} onChange={(e) => setTitle(e.target.value)} required />
         </div>
 
-        {/* 📌 내용 입력 영역 */}
-        <div className={styles.field}>
-          <label>내용</label>
-          <textarea
-            rows="10"
-            value={content} // 상태값과 연결
-            onChange={(e) => setContent(e.target.value)} // 입력 시 상태 변경
-            required // 빈 값 제출 방지
-          />
+        <div className={styles.row}>
+          <label>작성자</label>
+          <input value={writer} onChange={(e) => setWriter(e.target.value)} required />
         </div>
 
-        {/* 📌 첨부파일 선택 영역 */}
-        <div className={styles.field}>
-          <label>첨부파일</label>
-          <input
-            type="file"
-            onChange={(e) => setAttachment(e.target.files[0])} // 선택한 파일 저장
-          />
+        {/* 🔴 이메일 분리 */}
+        <div className={styles.row}>
+          <label>이메일</label>
+          <div className={styles.emailLine}>
+            <input
+              placeholder="아이디"
+              value={emailId}
+              onChange={(e) => setEmailId(e.target.value)}
+              required
+            />
+            <span>@</span>
+            <select
+              value={emailDomain}
+              onChange={(e) => setEmailDomain(e.target.value)}
+              required
+            >
+              <option value="">- 이메일 선택 -</option>
+              <option value="gmail.com">gmail.com</option>
+              <option value="naver.com">naver.com</option>
+              <option value="daum.net">daum.net</option>
+              <option value="hanmail.net">hanmail.net</option>
+            </select>
+          </div>
         </div>
 
-        {/* 📌 게시글 등록 버튼 */}
-        <button type="submit" className={styles.submitButton}>
-          등록하기
-        </button>
+        <div className={styles.editor}>
+          <textarea value={content} onChange={(e) => setContent(e.target.value)} required />
+        </div>
+
+        <div className={styles.row}>
+          <label>파일 첨부</label>
+          <input type="file" onChange={(e) => setAttachment(e.target.files[0])} />
+        </div>
+
+        <div className={styles.actions}>
+          <button type="submit">등록하기</button>
+          <button type="button" onClick={() => navigate(-1)}>취소</button>
+        </div>
       </form>
     </div>
   );

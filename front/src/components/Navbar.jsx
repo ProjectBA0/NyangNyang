@@ -88,7 +88,7 @@ function Navbar() {
             <li className={styles.divider}>|</li>
             <li><Link to="/events">EVENT</Link></li>
             <li><Link to="/about">ABOUT</Link></li>
-            <li><Link to="/contact">입점문의</Link></li>
+            <li><Link to="/Noticeboard">입점문의</Link></li>
             <li><Link to="/support">고객센터</Link></li>
           </ul>
         </nav>
