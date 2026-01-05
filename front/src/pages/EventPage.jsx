@@ -4,6 +4,8 @@
 >>>>>>> 6cc517ca74e60226b9ac4d6196dea2cb9c99a954
 import React from "react";
 import styles from "./EventPage.module.css";
+import EventBanner3D from "../components/EventBanner3D";
+import EventGrid from "../components/Event/EventGrid";
 
 /**
 <<<<<<< HEAD
@@ -52,20 +54,21 @@ export default function EventPage() {
   // 현재는 레이아웃 확인을 위한 더미 데이터입니다.
 =======
  * EventPage
- * - Layout based on provided wireframe specifications.
- * - Header and Footer are provided by MainLayout (App.jsx).
+ * - Composed of EventBanner3D and EventGrid components.
  */
 
 export default function EventPage() {
 >>>>>>> 6cc517ca74e60226b9ac4d6196dea2cb9c99a954
   const items = Array.from({ length: 8 }, (_, i) => ({
     id: i + 1,
-    title: `Event ${i + 1}`,
+    title: `특별한 이벤트 ${i + 1}`,
+    date: "2025.12.01 - 2025.12.31",
   }));
 
   return (
     <div className={styles.page}>
       <div className={styles.pageInner}>
+<<<<<<< HEAD
 <<<<<<< HEAD
         {/* ================= BANNER / TITLE ================= */}
         <Banner title="진행중 / 종료 이벤트" />
@@ -81,12 +84,16 @@ export default function EventPage() {
 
 =======
         {/* Wireframe GAP_190: Navbar is above this page, so this adds spacing below Navbar */}
+=======
+>>>>>>> a105c6e419380fd842db4fea1fb4feedd6fb85d0
         <div className={styles.topSpacer} />
         
-        <Banner title="진행중 / 종료 이벤트" />
+        {/* 3D Banner */}
+        <EventBanner3D />
         
-        {/* GAP_80 is handled by banner's margin-bottom in CSS */}
+        <div style={{ height: '80px' }}></div>
         
+        {/* Grid List */}
         <EventGrid items={items} />
         
         <div className={styles.bottomSpacer} />
@@ -95,6 +102,7 @@ export default function EventPage() {
     </div>
   );
 }
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 /* =========================================================================
@@ -162,3 +170,6 @@ function EventGrid({ items }) {
  */
 =======
 >>>>>>> 6cc517ca74e60226b9ac4d6196dea2cb9c99a954
+=======
+// (하단 Grid 함수 삭제)
+>>>>>>> a105c6e419380fd842db4fea1fb4feedd6fb85d0
