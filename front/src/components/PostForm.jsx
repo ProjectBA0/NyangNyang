@@ -1,109 +1,122 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // ✅ useLocation 추가
 import styles from "./PostForm.module.css";
-
-// 📌 localStorage에 저장될 게시글 목록 키
-const STORAGE_KEY = "notice_posts";
+import client from "../api/client"; // ✅ API 통신을 위한 client 추가
 
 export default function PostForm() {
-  // 📌 페이지 이동을 위한 navigate 함수
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // 📌 제목 입력값 상태
+  // ✅ 현재 작성 모드가 '이벤트'인지 확인
+  const isEventMode = new URLSearchParams(location.search).get('type') === 'event';
+
+  // 📌 입력값 상태
   const [title, setTitle] = useState("");
-
-  // 📌 내용 입력값 상태
   const [content, setContent] = useState("");
-
-  // 📌 첨부파일 상태 (파일 객체 저장)
   const [attachment, setAttachment] = useState(null);
 
   /**
    * 📌 게시글 등록 처리 함수
-   * - form 제출 시 실행
-   * - 기본 submit 동작(페이지 새로고침) 방지
-   * - localStorage에 새 게시글 저장
+   * - 실제 백엔드 API와 연동
    */
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 📌 기존 게시글 목록 불러오기
-    const savedPosts =
-      JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    if (!title.trim() || !content.trim()) {
+      alert("빈 칸을 모두 채워라냥!");
+      return;
+    }
 
-    // 📌 오늘 날짜를 YYYY-MM-DD 형식으로 생성
-    const today = new Date().toISOString().slice(0, 10);
+    try {
+      const endpoint = isEventMode ? "/api/event" : "/api/board/";
+      
+      // ✅ 서버 전송 데이터 구성
+      const payload = {
+        title,
+        content,
+        category: isEventMode ? "이벤트" : "일반",
+        // 이미지 업로드 기능은 추후 확장 예정 (현재는 텍스트 위주)
+        img_url: isEventMode ? "/images/banner/event_banner1.png" : null 
+      };
 
-    // 📌 새 게시글 객체 생성
-    const newPost = {
-      id: Date.now(),          // 고유 id (타임스탬프 사용)
-      title,                  // 게시글 제목
-      content,                // 게시글 내용
-      writer: "관리자",        // 작성자 (고정)
-      date: today,            // 작성일
-      view: 0,                // 조회수 초기값
-      attachmentName: attachment ? attachment.name : null, // 첨부파일 이름
-    };
-
-    /**
-     * 📌 새 글을 목록 맨 앞에 추가
-     * - 최신 글이 항상 위에 보이도록 처리
-     */
-    const updatedPosts = [newPost, ...savedPosts];
-
-    // 📌 localStorage에 저장
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(updatedPosts)
-    );
-
-    // 📌 등록 완료 후 게시판 목록 페이지로 이동
-    navigate("/Noticeboard");
+      await client.post(endpoint, payload);
+      
+      alert("등록이 완료되었다냥! ✨");
+      navigate(isEventMode ? "/events" : "/support");
+    } catch (err) {
+      console.error("등록 실패:", err);
+      alert("등록에 실패했다냥... 권한이 있는지 확인해라냥!");
+    }
   };
 
   return (
-    <div className={styles.container}>
-      {/* 📌 페이지 제목 */}
-      <h2 className={styles.title}>새 게시글 작성</h2>
+    <div className={styles.page}>
+      <div className={styles.container}>
+        {/* 📌 페이지 제목 */}
+        <h2 className={styles.title}>{isEventMode ? "새 이벤트 등록" : "새 게시글 작성"}</h2>
 
-      {/* 📌 게시글 작성 폼 */}
-      <form className={styles.form} onSubmit={handleSubmit}>
-        {/* 📌 제목 입력 영역 */}
-        <div className={styles.field}>
-          <label>제목</label>
-          <input
-            type="text"
-            value={title} // 상태값과 연결
-            onChange={(e) => setTitle(e.target.value)} // 입력 시 상태 변경
-            required // 빈 값 제출 방지
-          />
-        </div>
+        {/* 📌 게시글 작성 폼 */}
+        <form className={styles.form} onSubmit={handleSubmit}>
+          {/* 📌 제목 입력 영역 */}
+          <div className={styles.field}>
+            <label>제목</label>
+            <input
+              type="text"
+              placeholder="제목을 입력해라냥!" // ✅ 요청하신 말투 적용
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+          </div>
 
-        {/* 📌 내용 입력 영역 */}
-        <div className={styles.field}>
-          <label>내용</label>
-          <textarea
-            rows="10"
-            value={content} // 상태값과 연결
-            onChange={(e) => setContent(e.target.value)} // 입력 시 상태 변경
-            required // 빈 값 제출 방지
-          />
-        </div>
+          {/* 📌 내용 입력 영역 */}
+          <div className={styles.field}>
+            <label>내용</label>
+            <textarea
+              rows="10"
+              placeholder="내용을 상세히 입력해라냥!" // ✅ 요청하신 말투 적용
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              required
+            />
+          </div>
 
-        {/* 📌 첨부파일 선택 영역 */}
-        <div className={styles.field}>
-          <label>첨부파일</label>
-          <input
-            type="file"
-            onChange={(e) => setAttachment(e.target.files[0])} // 선택한 파일 저장
-          />
-        </div>
+          {/* 📌 첨부파일 선택 영역 */}
+          <div className={styles.field}>
+            <label>첨부파일 (선택)</label>
+            <input
+              type="file"
+              onChange={(e) => setAttachment(e.target.files[0])}
+            />
+          </div>
 
-        {/* 📌 게시글 등록 버튼 */}
-        <button type="submit" className={styles.submitButton}>
-          등록하기
-        </button>
-      </form>
+          {/* 📌 버튼 영역 */}
+          <div className={styles.buttonArea}>
+            <button type="submit" className={styles.submitButton}>
+              등록하기
+            </button>
+            <button type="button" className={styles.cancelButton} onClick={() => navigate(-1)}>
+              취소
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
+
+// ==============================================================================
+// [Gemini 작업 로그] - 26-01-04
+// 1. 테마 고도화: 프로젝트 메인 컬러(#BBD2E6, #556677)를 적용한 세련된 작성 페이지 UI 구현.
+// 2. UX 개선: 취소 버튼 추가 및 상세 페이지들과 일관된 레이아웃(1000px 카드) 적용.
+// [추가 수정]
+// 3. 기능 전환: localStorage 기반 로직을 실제 백엔드 DB API 기반으로 전면 교체.
+// 4. 멀티 모드 지원: URL 파라미터를 통해 '이벤트 등록'과 '일반 게시글 작성' 분기 처리.
+// 5. 고양이 테마 플레이스홀더 적용: "~해라냥!" 말투 적용.
+// ==============================================================================
+
+// ==============================================================================
+// [Gemini 작업 로그] - 26-01-04
+// 1. 테마 고도화: 프로젝트 메인 컬러(#BBD2E6, #556677)를 적용한 세련된 작성 페이지 UI 구현.
+// 2. UX 개선: 취소 버튼 추가 및 상세 페이지들과 일관된 레이아웃(1000px 카드) 적용.
+// ==============================================================================

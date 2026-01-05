@@ -1,20 +1,32 @@
-:root {
-  --action-btn-width: 748px; /* 이 값만 바꾸면 두 버튼 가로 길이 같이 바뀜 */
+/* PostForm.module.css */
+
+.page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 80px 0;
+  background-color: #fcfdfe;
 }
 
 .container {
-  max-width: 800px;
-  margin: 30px auto;
-  padding: 25px;
-  border: 1px solid #e7e7e7;
-  border-radius: 8px;
-  background: #fff;
+  width: 1000px;
+  padding: 60px;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 15px 40px rgba(187, 210, 230, 0.25);
+  border: 1px solid #E8EEF8;
 }
 
 .title {
-  margin-bottom: 25px;
-  text-align: center;
-  color: #333;
+  text-align: left;
+  margin-bottom: 40px;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #334455;
+  letter-spacing: -0.5px;
+  border-bottom: 2px solid #F4F8FB;
+  padding-bottom: 20px;
 }
 
 .form {
@@ -23,57 +35,100 @@
 }
 
 .field {
-  margin-bottom: 18px;
+  margin-bottom: 30px;
 }
 
 .field label {
   display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
-  color: #555;
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #556677;
 }
 
 .field input[type="text"],
 .field textarea {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 15px 20px;
+  border-radius: 12px;
+  border: 2px solid #E8EEF8;
+  font-size: 1rem;
   box-sizing: border-box;
+  transition: all 0.3s ease;
+  background-color: #fcfdfe;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: #BBD2E6;
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgba(187, 210, 230, 0.2);
 }
 
 .field textarea {
   resize: vertical;
+  min-height: 300px;
+  line-height: 1.6;
 }
 
-/* ✅ 파일 선택 버튼 */
+/* 파일 선택 영역 */
 .field input[type="file"] {
-  width: var(--action-btn-width);
-  border: 1px solid #ccc;
-  padding: 8px;
-  background: #f9f9f9;
-  border-radius: 4px;
-}
-
-.fileName {
-  margin-top: 6px;
-  font-size: 14px;
-  color: #666;
-}
-
-/* ✅ 등록하기 버튼 */
-.submitButton {
-  margin-top: 10px;
-  width: var(--action-btn-width);
+  width: 100%;
   padding: 12px;
-  background-color: #BBD2E6;
-  color: #2f4f6f;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
+  background: #f8f9fa;
+  border: 2px dashed #D5E5F3;
+  border-radius: 12px;
   cursor: pointer;
 }
 
+.field input[type="file"]:hover {
+  background: #f1f3f5;
+  border-color: #BBD2E6;
+}
+
+/* 버튼 영역 */
+.buttonArea {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 50px;
+}
+
+.submitButton {
+  min-width: 160px;
+  height: 55px;
+  background-color: #556677;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 10px rgba(85, 102, 119, 0.2);
+}
+
 .submitButton:hover {
-  background-color: #a9c6df;
+  background-color: #445566;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(85, 102, 119, 0.3);
+}
+
+.cancelButton {
+  min-width: 120px;
+  height: 55px;
+  background-color: #E8EEF8;
+  color: #556677;
+  border: 1px solid #D5E5F3;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancelButton:hover {
+  background-color: #D5E5F3;
+  transform: translateY(-2px);
 }

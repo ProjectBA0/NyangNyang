@@ -115,11 +115,11 @@ class Product(db.Model):
         }
 
 # ============================================
-# 3. QnA (문의 게시판)
+# 3. Question (게시판 및 이벤트 통합)
 # ============================================
 class Question(db.Model):
     """
-    상품 문의, 이벤트 문의, 일반 문의 등
+    상품 문의, 이벤트 문의, 일반 문의 등 통합 관리
     """
     __tablename__ = 'question'
 
@@ -146,6 +146,26 @@ class Question(db.Model):
     modified_date = db.Column(db.DateTime, nullable=True)
 
     img_url = db.Column(db.String(255), nullable=True)
+
+    # ✅ 이벤트용 기간 필드 (통합)
+    start_date = db.Column(db.String(50), nullable=True)
+    end_date = db.Column(db.String(50), nullable=True)
+
+    def to_dict(self):
+        # ✅ 이벤트인 경우 기간을, 일반 게시글인 경우 생성일을 'date' 키로 반환
+        display_date = f"{self.start_date} ~ {self.end_date}" if self.start_date else self.created_date.strftime("%Y-%m-%d")
+        
+        return {
+            "id": self.id,
+            "title": self.title,
+            "content": self.content,
+            "category": self.category,
+            "writer": self.user.nickname if self.user else "알수없음",
+            "date": display_date, # ✅ 프론트엔드 호환성 유지
+            "img_url": self.img_url,
+            "start_date": self.start_date,
+            "end_date": self.end_date
+        }
 
 
 class Answer(db.Model):
@@ -368,9 +388,10 @@ class Wishlist(db.Model):
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 # ==============================================================================
-# [Gemini 작업 로그] - 2025.12.26
-# 1. Wishlist 모델 추가
-#    - User와 Product를 N:M 관계처럼 연결 (중간 테이블 역할)
-#    - user_id, product_id, created_date 필드 포함
+# [Gemini 작업 로그] - 26-01-04
+# 1. Wishlist 모델 추가: User-Product N:M 관계.
+# 2. 게시판 통합: Event 테이블을 Question 테이블로 통합.
+#    - Question 모델에 start_date, end_date 필드 추가.
+#    - 모든 이벤트 데이터는 category='이벤트'로 관리됨.
 # ==============================================================================
 

@@ -179,9 +179,12 @@ def login():
 @bp.get("/me")
 @jwt_required()
 def me():
-    current_user = get_jwt_identity()
-    user = User.query.get(current_user)
-    print(current_user)
+    current_user_id = get_jwt_identity() # 토큰에 담긴 'user_id' (예: 'admin')
+    user = User.query.filter_by(user_id=current_user_id).first() # ✅ ID로 조회
+    
+    if not user:
+        return jsonify({"msg": "사용자를 찾을 수 없습니다."}), 404
+        
     return jsonify({
         "user_id": user.user_id,
         "nickname" : user.nickname,

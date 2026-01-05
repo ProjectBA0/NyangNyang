@@ -66,83 +66,105 @@
     border: none;
     overflow: hidden;
     cursor: pointer;
-    transition: filter 0.3s ease, transform 0.3s ease;
+    border-radius: var(--border-radius-card); /* ✅ 둥근 모서리 적용 */
+    transition: var(--transition-smooth);
 }
 
 .dog {
-    margin-right: 5px;
-    background-color: #e8eef8;
+    margin-right: 10px;
+    background-color: var(--secondary-blue);
 }
 
 .cat {
-    margin-left: 5px;
-    background-color: #d5e5f3;
+    margin-left: 10px;
+    background-color: #D5E5F3;
 }
 
 .categoryImg {
     height: 100px;
     object-fit: contain;
+    transition: transform 0.3s ease;
 }
 
 .categoryText {
-    margin-top: 8px;
-    font-size: 36px;
-    font-weight: 700;
-    color: #222;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--dark-blue);
 }
 
 .categoryBox:hover {
-    filter: brightness(0.9);
+    filter: brightness(0.95);
+    transform: translateY(-5px); /* ✅ 살짝 떠오름 */
 }
 
 .categoryBox:hover .categoryImg {
-    transform: scale(1.05);
+    transform: scale(1.1) rotate(5deg); /* ✅ 귀여운 회전 효과 */
 }
 
 .best {
-    margin-top: 40px;
-    
+    margin-top: 60px;
 }
 
 .best h3 {
-  margin-bottom: 32px;
+  margin-bottom: 40px;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--dark-blue);
+  text-align: center;
 }
 
 .bestitems {
     display: grid;
-    /* 열을 동일너비로 4개 만듦 */
     grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
+    gap: 30px;
     align-items: stretch;
 }
 
+/* ✅ 카드 디자인 고도화 */
 .productCard {
     display: flex;
     flex-direction: column;
     align-items: center; 
     cursor: pointer;
+    background: #fff;
+    padding: 20px;
+    border-radius: var(--border-radius-card);
+    border: 1px solid #F0F4F8;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition-smooth);
+}
+
+.productCard:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--card-shadow-hover);
+    border-color: var(--primary-blue);
 }
 
 .productImg {
-    width: 90%;
-    /* 이미지를 무조건 정사각형 영역에 들어가게 */
+    width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
+    border-radius: 16px;
+    margin-bottom: 15px;
 }
 
 .productTitle {
-  margin: 12px 0 4px;
-  font-size: 14px;
-  line-height: 1.3;
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text-main);
+  text-align: center;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
+  -webkit-line-clamp: 2;
   overflow: hidden;
-  min-height: calc(1.3em * 1);
-  text-align: center;
+  height: 2.8em;
 }
 
 .productPrice {
-  font-weight: 600;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--dark-blue);
   text-align: center;
 }

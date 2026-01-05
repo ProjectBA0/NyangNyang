@@ -140,29 +140,40 @@
 .boardRow {
   display: flex;
   align-items: center;
-  padding: 20px 30px;
+  padding: 24px 35px;
   background-color: #FFFFFF;
-  border-radius: 16px;
-  border: 1px solid #E8EEF8;
-  box-shadow: 0 2px 5px rgba(187, 210, 230, 0.1);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smooth spring-like */
+  border-radius: 18px;
+  border: 1px solid var(--secondary-blue);
+  box-shadow: var(--card-shadow);
+  transition: var(--transition-smooth);
   cursor: pointer;
   position: relative;
   z-index: 1;
 }
 
 .boardRow:hover {
-  transform: translateY(-5px) scale(1.01); /* 살짝 커지며 올라감 */
-  box-shadow: 0 15px 30px rgba(187, 210, 230, 0.25); /* 깊은 그림자 */
-  border-color: #BBD2E6;
-  z-index: 2; /* 호버 시 다른 요소보다 위에 보이도록 */
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--primary-blue);
+  z-index: 2;
 }
 
 /* Row Content Layout */
-.rowNo { width: 80px; font-weight: bold; color: #BBD2E6; }
-.rowCategory { width: 120px; font-weight: 600; color: #556677; background: #E8EEF8; padding: 5px 10px; border-radius: 8px; text-align: center; font-size: 0.9rem; margin-right: 20px; }
-.rowTitle { flex: 1; font-size: 1.1rem; color: #333; font-weight: 500; }
-.rowDate { width: 120px; text-align: right; color: #99aabb; font-size: 0.9rem; }
+.rowNo { width: 80px; font-weight: 800; color: var(--primary-blue); font-size: 1.1rem; }
+.rowCategory { 
+    width: 110px; 
+    font-weight: 700; 
+    color: var(--dark-blue); 
+    background: var(--secondary-blue); 
+    padding: 6px 12px; 
+    border-radius: 10px; 
+    text-align: center; 
+    font-size: 0.85rem; 
+    margin-right: 25px; 
+}
+.rowTitle { flex: 1; font-size: 1.15rem; color: var(--text-main); font-weight: 600; }
+.rowWriter { width: 150px; color: var(--text-muted); font-size: 0.95rem; text-align: center; }
+.rowDate { width: 120px; text-align: right; color: var(--text-muted); font-size: 0.9rem; }
 
 /* Pagination */
 .pagination {
@@ -197,5 +208,37 @@
   color: #fff;
   border-color: #BBD2E6;
   font-weight: bold;
+}
+
+/* --- 5. Board Footer (Pagination + Write Button) --- */
+.boardFooter {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative; /* 버튼 절대 배치를 위한 기준 */
+  margin-top: 40px;
+}
+
+.writeBtn {
+  position: absolute;
+  right: 0;
+  height: 45px;
+  padding: 0 25px;
+  background-color: #556677; /* 테마의 포인트 컬러 */
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(85, 102, 119, 0.2);
+}
+
+.writeBtn:hover {
+  background-color: #445566;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(85, 102, 119, 0.3);
 }
 

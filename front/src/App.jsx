@@ -34,6 +34,7 @@ import Recent from "./components/Recent";
 import Footer from './components/Footer'; 
 import MainPage from "./pages/MainPage"; 
 import EventPage from "./pages/EventPage"; 
+import EventDetail from "./components/Event/EventDetail"; // ✅ 이벤트 상세 페이지 추가
 import CustomerCenterPage from "./pages/CustomerCenterPage"; 
 import Chatbot from "./components/Chatbot"; 
 import Noticeboard from "./components/Noticeboard";
@@ -75,6 +76,8 @@ export default function App() {
           <Route path="cart" element={<CartPage />} />
           <Route path="order/complete" element={<OrderComplete />} />
           <Route path="/events" element={<EventPage />} /> {/* Navbar의 /events와 매핑 */}
+          <Route path="/events/:id" element={<EventDetail />} /> {/* ✅ 이벤트 상세 페이지 라우트 추가 */}
+          <Route path="/events/edit/:id" element={<EditPost />} /> {/* ✅ 이벤트 수정 라우트 추가 */}
           <Route path="/support" element={<CustomerCenterPage />} /> {/* Navbar의 /support와 매핑 */}
           <Route path="/Noticeboard" element={<Noticeboard />} />
           <Route path="/Noticeboard/:id" element={<NoticeDetail />} />
@@ -117,4 +120,6 @@ export default function App() {
 // [Gemini 작업 로그] - 2025.12.26
 // 1. 라우팅 추가: /wishlist (찜목록/마이페이지) 경로 등록 및 컴포넌트 임포트.
 // 2. 레이아웃 유지: MainLayout 내부에 배치하여 Navbar/Footer 공통 적용.
+// [추가 수정]
+// 3. 라우팅 추가: `/events/:id` (이벤트 상세 페이지) 등록 및 `EventDetail` 컴포넌트 임포트.
 // ==============================================================================

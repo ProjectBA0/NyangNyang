@@ -1,6 +1,14 @@
 {
-  "dependencies": {
-    "@splinetool/react-spline": "^4.1.0",
-    "framer-motion": "^12.23.26"
+  "name": "nyang-root",
+  "version": "1.0.0",
+  "description": "Root package for DaitDanyang project to run both frontend and backend concurrently.",
+  "scripts": {
+    "start": "concurrently \"npm run start:back\" \"npm run start:front\"",
+    "start:back": "cd back && ..\\.venv\\Scripts\\python app.py",
+    "start:front": "cd front && npm start",
+    "install:all": "npm install && cd front && npm install && cd ../back && ..\\.venv\\Scripts\\pip install -r requirements.txt"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }
