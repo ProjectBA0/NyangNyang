@@ -1,16 +1,18 @@
+
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./PostForm.module.css";
 
 import { createPost, fetchMe } from "../api/postApi";
 
+
 export default function PostForm() {
   const navigate = useNavigate();
 
-  // 저장 위치(게시판)
-  const [boardType, setBoardType] = useState("NOTICE"); // NOTICE | QNA | PARTNER | FREE 등
 
   const [title, setTitle] = useState("");
+  const [writer, setWriter] = useState("");
+
 
   // 작성자 / 이메일 (기본은 프로필에서 채움)
   const [writer, setWriter] = useState("");
@@ -77,6 +79,7 @@ export default function PostForm() {
   useEffect(() => {
     if (boardType === "PARTNER") {
       setContent(
+
 `안녕하세요 입점관련 문의남겨주시면 확인 후에 연락드리도록 하겠습니다.
 관련 자료(상세페이지 등) 파일 첨부 부탁드립니다.
 감사합니다.
@@ -90,6 +93,7 @@ export default function PostForm() {
 7) 판매원 :
 8) 수입원 :
 9) 판매처링크 : 온라인 판매처 기입 생략 및 관련 자료 첨부`
+
       );
     } else {
       setContent("");
@@ -122,11 +126,13 @@ export default function PostForm() {
       alert("등록에 실패했습니다.");
       console.error(err);
     }
+
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.notice}>
+
         게시글 작성 페이지입니다.
       </div>
 
@@ -215,6 +221,7 @@ export default function PostForm() {
         <div className={styles.row}>
           <label>파일 첨부</label>
           <input type="file" onChange={(e) => setAttachment(e.target.files?.[0] ?? null)} />
+
         </div>
 
         <div className={styles.actions}>

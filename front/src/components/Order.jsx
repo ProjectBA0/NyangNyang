@@ -1,90 +1,143 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Order.module.css";
+import axios from "axios";
 
-/**
- * 주문 / 결제 페이지 컴포넌트
- * - 주문자 정보 입력
- * - 배송지 정보 입력
- * - 주문 상품 및 금액 확인
- * - 결제 수단 선택
- * - 결제 버튼 제공
- */
 const Order = () => {
+  /* ===== 주문 데이터 ===== */
+  const [orderData, setOrderData] = useState({
+    orderName: "",
+    email: "",
+    phone: "",
+    receiver: "",
+    address: "",
+    receiverPhone: "",
+    message: "",
+    paymentMethod: "",
+  });
+
+  /* ===== input 처리 ===== */
+  const handleChange = (key, value) => {
+    setOrderData((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  /* ===== 결제수단 선택 ===== */
+  const selectPayment = (method) => {
+    setOrderData((prev) => ({
+      ...prev,
+      paymentMethod: method,
+    }));
+  };
+
+  /* ===== 결제하기 ===== */
+  const handlePay = async () => {
+    if (!orderData.paymentMethod) {
+      alert("결제수단을 선택하세요");
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        "http://localhost:4000/api/payment",
+        orderData
+      );
+
+      alert("결제가 완료되었습니다");
+      console.log("결제 결과:", res.data);
+    } catch (err) {
+      console.error(err);
+      alert("결제 실패");
+    }
+  };
+
   return (
-    /* 페이지 전체 영역 */
     <div className={styles.page}>
-      {/* 주문/결제 카드 래퍼 */}
       <div className={styles.orderWrap}>
 
-        {/* 페이지 제목 */}
         <div className={styles.orderTitle}>주문 / 결제</div>
 
-        {/* ================= 주문 정보 영역 ================= */}
+        {/* ================= 주문 정보 ================= */}
         <section className={styles.section}>
-          {/* 섹션 헤더 */}
           <div className={styles.sectionHeader}>주문 정보</div>
 
-          {/* 입력 폼 영역 */}
           <div className={styles.sectionBody}>
-            {/* 주문자 이름 입력 */}
             <div className={styles.formRow}>
               <div className={styles.label}>주문자</div>
-              <input className={styles.inputBox} />
+              <input
+                className={styles.inputBox}
+                onChange={(e) => handleChange("orderName", e.target.value)}
+              />
             </div>
 
-            {/* 이메일 입력 */}
             <div className={styles.formRow}>
               <div className={styles.label}>이메일</div>
-              <input className={styles.inputBox} />
+              <input
+                className={styles.inputBox}
+                onChange={(e) => handleChange("email", e.target.value)}
+              />
             </div>
 
-            {/* 휴대전화 입력 */}
             <div className={styles.formRow}>
               <div className={styles.label}>휴대전화</div>
-              <input className={styles.inputBox} />
+              <input
+                className={styles.inputBox}
+                onChange={(e) => handleChange("phone", e.target.value)}
+              />
             </div>
           </div>
         </section>
 
-        {/* ================= 배송지 정보 영역 ================= */}
+        {/* ================= 배송지 ================= */}
         <section className={styles.section}>
           <div className={styles.sectionHeader}>배송지</div>
 
           <div className={styles.sectionBody}>
-            {/* 받는 사람 이름 */}
             <div className={styles.formRow}>
               <div className={styles.label}>받는사람</div>
-              <input className={styles.inputBox} />
+              <input
+                className={styles.inputBox}
+                onChange={(e) => handleChange("receiver", e.target.value)}
+              />
             </div>
 
-            {/* 주소 입력 */}
             <div className={styles.formRow}>
               <div className={styles.label}>주소</div>
-              <input className={styles.inputBoxSmall} />
+              <input
+                className={styles.inputBoxSmall}
+                onChange={(e) => handleChange("address", e.target.value)}
+              />
             </div>
 
-            {/* 연락처 입력 */}
             <div className={styles.formRow}>
               <div className={styles.label}>휴대전화</div>
-              <input className={styles.inputBox} />
+              <input
+                className={styles.inputBox}
+                onChange={(e) => handleChange("receiverPhone", e.target.value)}
+              />
             </div>
 
-            {/* 배송 메시지 선택 영역 (드롭다운 예정) */}
-            <div className={styles.messageBox}>-- 메시지 선택 --</div>
+            <select
+              className={styles.messageBox}
+              onChange={(e) => handleChange("message", e.target.value)}
+            >
+              <option value="">-- 메시지 선택 --</option>
+              <option value="문앞에 놓아주세요">문앞에 놓아주세요</option>
+              <option value="경비실에 맡겨주세요">경비실에 맡겨주세요</option>
+              <option value="부재 시 연락주세요">부재 시 연락주세요</option>
+            </select>
           </div>
         </section>
 
-        {/* ================= 주문 상품 정보 ================= */}
+        {/* ================= 주문 상품 ================= */}
         <section className={styles.section}>
           <div className={styles.sectionHeader}>주문상품</div>
 
           <div className={styles.sectionBody}>
-            {/* 상품 정보 행 */}
             <div className={styles.productRow}>
-              {/* 상품 이미지 영역 */}
               <div className={styles.productImage}></div>
 
-              {/* 상품 설명 영역 */}
               <div className={styles.productInfo}>
                 슈퍼 스펀즈 트릿 스틱<br />
                 옵션: 치킨<br />
@@ -92,7 +145,6 @@ const Order = () => {
               </div>
             </div>
 
-            {/* 배송비 표시 영역 */}
             <div className={`${styles.priceRow} ${styles.productShipping}`}>
               <span>배송비</span>
               <span>원</span>
@@ -100,24 +152,21 @@ const Order = () => {
           </div>
         </section>
 
-        {/* ================= 결제 금액 정보 ================= */}
+        {/* ================= 결제 정보 ================= */}
         <section className={styles.section}>
           <div className={styles.sectionHeader}>결제정보</div>
 
           <div className={styles.sectionBody}>
-            {/* 상품 금액 */}
             <div className={styles.priceRow}>
               <span>상품금액</span>
               <span>원</span>
             </div>
 
-            {/* 배송비 */}
             <div className={styles.priceRow}>
               <span>배송비</span>
               <span>원</span>
             </div>
 
-            {/* 최종 결제 금액 */}
             <div className={styles.totalRow}>
               <span>최종 결제 금액</span>
               <span>원</span>
@@ -125,25 +174,57 @@ const Order = () => {
           </div>
         </section>
 
-        {/* ================= 결제 수단 선택 ================= */}
+        {/* ================= 결제 수단 ================= */}
         <section className={styles.section}>
           <div className={styles.sectionHeader}>결제수단</div>
 
-          {/* 결제 방법 목록 (추후 버튼/라디오로 변경 가능) */}
           <div className={`${styles.sectionBody} ${styles.paymentMethods}`}>
-            카드결제<br />
-            실시간 계좌이체<br />
-            가상계좌<br />
-            휴대폰 결제<br />
-            네이버페이<br />
-            페이코<br />
-            토스페이
+            <button onClick={() => selectPayment("CARD")}
+              style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <img src="/logos/card.png" alt="카드" height="20" />
+              카드결제
+            </button><br />
+
+            <button onClick={() => selectPayment("BANK")}
+              style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <img src="/logos/bank.png" alt="계좌이체" height="20" />
+              실시간 계좌이체
+            </button><br />
+
+            <button onClick={() => selectPayment("VIRTUAL")}
+              style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <img src="/logos/virtual.png" alt="가상계좌" height="20" />
+              가상계좌
+            </button><br />
+
+            <button onClick={() => selectPayment("PHONE")}
+              style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <img src="/logos/phone.png" alt="휴대폰" height="20" />
+              휴대폰 결제
+            </button><br />
+
+            <button onClick={() => selectPayment("NAVER")}
+              style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <img src="/logos/naverpay.png" alt="네이버페이" height="20" />
+              네이버페이
+            </button><br />
+
+            <button onClick={() => selectPayment("PAYCO")}
+              style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <img src="/logos/payco.png" alt="페이코" height="20" />
+              페이코
+            </button><br />
+
+            <button onClick={() => selectPayment("TOSS")}
+              style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <img src="/logos/toss.png" alt="토스페이" height="20" />
+              토스페이
+            </button>
           </div>
         </section>
 
         {/* ================= 결제 버튼 ================= */}
-        {/* 실제 결제 로직은 onClick 이벤트로 연결 예정 */}
-        <button className={styles.payButton}>
+        <button className={styles.payButton} onClick={handlePay}>
           결제하기
         </button>
 
