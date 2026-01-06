@@ -107,7 +107,7 @@
   font-size: 13px;
 }
 
-/* ✅ 가격 (🔥 여기 중요) */
+/* ✅ 가격 */
 .priceRow {
   margin-top: 10px;
   display: flex;
@@ -115,28 +115,74 @@
   font-size: 13px;
 }
 
-
 .totalRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   height: 44px;
   padding: 0 12px;
   margin-top: 14px;
-
   background: #eef3fa;
   font-weight: bold;
   box-sizing: border-box;
 }
 
-/* 결제수단 */
+/* ================= 결제수단 (정렬만 개선) ================= */
+
 .paymentMethods {
   padding-left: 120px;
-  line-height: 1.8;
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  justify-content: center;   /* 🔥 전체 버튼 가운데 정렬 */
+  align-items: center;
+
   font-size: 13px;
-  text-align: left;
   box-sizing: border-box;
+}
+
+
+.paymentMethods button {
+  min-width: 140px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;   /* 🔥 버튼 내부 가운데 */
+
+  gap: 8px;
+  height: 44px;
+  padding: 0 14px;
+
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  box-sizing: border-box;
+
+  transition: all 0.2s ease;
+}
+
+
+.paymentMethods button img {
+  height: 20px;
+  width: auto;
+  display: block;
+}
+
+.paymentMethods button:hover {
+  border-color: #9bbce6;
+  background: #f3f8ff;
+}
+
+.paymentMethods button.active {
+  border-color: #3b82f6;
+  background: #eef5ff;
+  font-weight: bold;
 }
 
 /* 결제 버튼 */
@@ -152,18 +198,16 @@
   cursor: pointer;
   box-sizing: border-box;
 }
-/* 🔥 주문상품 전용 배송비 (보더 제거) */
+
+/* 🔥 주문상품 전용 배송비 */
 .productShipping {
   height: 40px;
   margin-top: 12px;
   padding: 0 12px;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  background: #eef3fa;   /* 두 번째 사진과 동일한 색 */
-  border: none;          /* ✅ 보더 제거 */
+  background: #eef3fa;
+  border: none;
   box-sizing: border-box;
 }
-
