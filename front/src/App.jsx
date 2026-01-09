@@ -18,6 +18,7 @@ import Chatbot from "./components/Chatbot";
 import React from "react";
 import { Route, Routes, Navigate, Outlet } from "react-router-dom";
 
+
 import Navbar from "./components/Navbar";
 import PostForm from "./components/PostForm";
 import Category from "./components/Category";
@@ -45,7 +46,7 @@ import Withdraw from "./pages/MyPage/member/Withdraw";
 // 기타
 import MyQna from "./pages/MyPage/MyQna";
 import MyReview from "./pages/MyPage/MyReview";
-
+import Recent from "./components/Recent";
 
 import Footer from './components/Footer'; 
 import MainPage from "./pages/MainPage"; 
@@ -53,10 +54,14 @@ import EventPage from "./pages/EventPage";
 import CustomerCenterPage from "./pages/CustomerCenterPage"; 
 import Chatbot from "./components/Chatbot"; 
 import Noticeboard from "./components/Noticeboard";
-// import NoticeDetail from "./components/NoticeDetail";
-// import EditPost from "./components/EditPost";
+ import NoticeDetail from "./components/NoticeDetail";
+ import EditPost from "./components/EditPost";
 import Order from "./components/Order";
+<<<<<<< HEAD
 >>>>>>> 6cc517ca74e60226b9ac4d6196dea2cb9c99a954
+=======
+import AdminPostForm from "./components/AdminPostForm";
+>>>>>>> ca0d4aed4891690f38c174feb28b7b555157aa6d
 
 
 /** ✅ 네비바가 필요한 페이지들의 공통 틀 */
@@ -118,16 +123,20 @@ export default function App() {
           {/* 기존 페이지들 */}
           <Route path="category/:pet/:sub?" element={<Category />} />
           <Route path="product/:id" element={<Product />} />
-          {/* <Route path="/write" element={<PostForm />} /> */}
+           <Route path="/write" element={<PostForm />} /> 
           <Route path="find-account" element={<FindAccount />} />
           <Route path="cart" element={<CartPage />} />
           <Route path="order/complete" element={<OrderComplete />} />
           <Route path="/events" element={<EventPage />} /> {/* Navbar의 /events와 매핑 */}
           <Route path="/support" element={<CustomerCenterPage />} /> {/* Navbar의 /support와 매핑 */}
           <Route path="/Noticeboard" element={<Noticeboard />} />
-          {/* <Route path="/Noticeboard/:id" element={<NoticeDetail />} />
-          <Route path="/Noticeboard/edit/:id" element={<EditPost />} /> */}
+          <Route path="/Noticeboard/:id" element={<NoticeDetail />} />
+          <Route path="/Noticeboard/edit/:id" element={<EditPost />} /> 
           <Route path="/order" element={<Order />} />
+
+          <Route path="/AdminPostForm" element={<AdminPostForm />} />
+          <Route path="/view" element={<Recent />} />
+
 
           {/* ✅ 마이페이지 */}
           <Route path="mypage" element={<MyPageLayout />}>
@@ -135,7 +144,6 @@ export default function App() {
 
             <Route path="shopping/orders" element={<OrderList />} />
             <Route path="shopping/returns" element={<ReturnCancel />} />
-            {/* <Route path="shopping/wishlist" element={<WishList />} /> */}
 
             <Route path="shopping/wishlist" element={<WishlistPage />} /> {/* 찜목록 (마이페이지) */}
 
@@ -157,6 +165,7 @@ export default function App() {
       <Chatbot />
     </div>
   );
+<<<<<<< HEAD
 }
 
 <<<<<<< HEAD
@@ -168,3 +177,6 @@ export default App;
 // 2. 레이아웃 유지: MainLayout 내부에 배치하여 Navbar/Footer 공통 적용.
 // ==============================================================================
 >>>>>>> 6cc517ca74e60226b9ac4d6196dea2cb9c99a954
+=======
+}
+>>>>>>> ca0d4aed4891690f38c174feb28b7b555157aa6d

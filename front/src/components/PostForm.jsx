@@ -1,83 +1,140 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./PostForm.module.css";
 
-const STORAGE_KEY = "notice_posts";
+
+import { createPost } from "../api/postApi";
+
+import { fetchMe } from "../api/authApi";
 
 export default function PostForm() {
   const navigate = useNavigate();
 
+  // 게시판 타입
+  const [boardType, setBoardType] = useState("문의사항");
+
   const [title, setTitle] = useState("");
+
   const [content, setContent] = useState("");
   const [attachment, setAttachment] = useState(null);
 
-  const handleSubmit = (e) => {
+  // 화면 표시용 (서버에 보내지 않음)
+  const [writer, setWriter] = useState("");
+  const [email, setEmail] = useState("");
+
+  // ✅ 로그인 체크 + 내 정보 표시용
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+      return;
+    }
+
+    (async () => {
+      try {
+
+        const me = await fetchMe(); // { nickname, email }
+        setWriter(me?.nickname || "");
+        setEmail(me?.email || "");
+      } catch (err) {
+        alert("로그인 정보 확인에 실패했습니다.");
+
+        localStorage.removeItem("accessToken");
+        navigate("/login");
+      }
+    })();
+  }, [navigate]);
+
+
+  // ✅ 게시글 등록
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const savedPosts =
-      JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    if (!title.trim() || !content.trim()) {
+      alert("제목과 내용을 입력해주세요.");
+      return;
+    }
 
-    const today = new Date().toISOString().slice(0, 10);
+    try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("content", content);
 
-    const newPost = {
-      id: Date.now(),          // 고유 id
-      title,
-      content,
-      writer: "관리자",
-      date: today,
-      view: 0,
-      attachmentName: attachment ? attachment.name : null,
-    };
+      formData.append("boardType", boardType);
 
-    // 🔥 새 글을 항상 맨 위에 추가
-    const updatedPosts = [newPost, ...savedPosts];
+      // ❌ writer / email 안 보냄 (서버가 토큰 기준으로 결정)
+      if (attachment) {
+        formData.append("attachment", attachment);
+      }
 
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(updatedPosts)
-    );
+      await createPost(formData);
 
-    // 🔥 등록 후 Noticeboard로 이동
-    navigate("/Noticeboard");
+      alert("게시글이 등록되었습니다.");
+      navigate("/Noticeboard");
+    } catch (err) {
+      alert("등록에 실패했습니다.");
+      console.error(err);
+    }
   };
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>새 게시글 작성</h2>
+      <div className={styles.notice}>
+        게시글 작성 페이지입니다.
+      </div>
 
       <form className={styles.form} onSubmit={handleSubmit}>
-        <div className={styles.field}>
+        {/* 게시판 타입 */}
+        <div className={styles.row}>
+
+          <label>게시판</label>
+          <select
+            value={boardType}
+            onChange={(e) => setBoardType(e.target.value)}
+          >
+
+            <option value="문의사항">문의사항</option>
+            <option value="건의사항">건의사항</option>
+            <option value="기타">기타</option>
+          </select>
+        </div>
+
+        {/* 제목 */}
+        <div className={styles.row}>
           <label>제목</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
+          <input value={title} onChange={(e) => setTitle(e.target.value)} required />
         </div>
 
-        <div className={styles.field}>
-          <label>내용</label>
-          <textarea
-            rows="10"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            required
-          />
+
+        {/* 작성자 (표시용) */}
+        <div className={styles.row}>
+          <label>작성자</label>
+          <input value={writer} disabled />
         </div>
 
-        <div className={styles.field}>
-          <label>첨부파일</label>
-          <input
-            type="file"
-            onChange={(e) => setAttachment(e.target.files[0])}
-          />
+        {/* 이메일 (표시용) */}
+        <div className={styles.row}>
+          <label>이메일</label>
+          <input value={email} disabled />
+
         </div>
 
-        {/* 버튼 텍스트는 '등록' 고정 */}
-        <button type="submit" className={styles.submitButton}>
-          등록하기
-        </button>
+        {/* 내용 */}
+        <div className={styles.editor}>
+          <textarea value={content} onChange={(e) => setContent(e.target.value)} required />
+        </div>
+
+        {/* 파일 첨부 */}
+        <div className={styles.row}>
+          <label>파일 첨부</label>
+          <input type="file" onChange={(e) => setAttachment(e.target.files?.[0] ?? null)} />
+        </div>
+
+        <div className={styles.actions}>
+          <button type="submit">등록하기</button>
+          <button type="button" onClick={() => navigate(-1)}>취소</button>
+        </div>
       </form>
     </div>
   );

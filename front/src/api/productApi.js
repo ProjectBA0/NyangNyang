@@ -10,10 +10,21 @@ export async function fetchProductDetail(productId) {
   return res.data;
 }
 
+export async function fetchMainReviews() {
+  const res = await client.get("/api/reviews/main");
+  return res.data;
+}
+
 export async function fetchReviews(productId, page, sort) {
   const res = await client.get(
     `/api/product/${productId}/reviews`,
     { params: { page, limit: 5, sort } }
   );
   return res.data;
+}
+
+export async function createReview(productId, formData) {
+  const res = await client.post(
+    `api/product/${productId}/reviews`, formData);
+    return res.data;
 }

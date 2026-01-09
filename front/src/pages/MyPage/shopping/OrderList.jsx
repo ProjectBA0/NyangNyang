@@ -1,12 +1,8 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./OrderList.module.css";
+import ReviewModal from "../ReviewModal"; // 경로 유지
+import { getOrders } from "../../../api/orderListApi";
 
-/**
- * 주문목록 페이지 (UI 더미버전)
- * - 상단: 주문상태 필터 + 기간 버튼 + 날짜 범위 + 조회 버튼
- * - 목록: 주문(주문번호/주문일자) 단위로 묶고, 그 아래 상품들 렌더링
- * - 버튼: 상태에 따라 구매후기/취소/교환반품 노출 예시
- */
 
 const STATUS_OPTIONS = [
   { value: "ALL", label: "전체 주문처리상태" },
@@ -24,112 +20,76 @@ const QUICK_RANGES = [
   { key: "3m", label: "3개월", days: 90 },
 ];
 
-// ✅ 더미 주문 데이터 (나중에 API 응답으로 대체)
-const DUMMY_ORDERS = [
-  {
-    orderId: "20240825-0009329",
-    orderedAt: "2024-08-25",
-    items: [
-      {
-        id: "item-1",
-        imageUrl:
-          "https://images.unsplash.com/photo-1520975958225-99f6cc2bbd9a?w=200&q=80",
-        name: "하프넥 스티치 리본 맞주름 롱 원피스",
-        optionText: "네이비(navy) / free",
-        qty: 1,
-        price: 40000,
-        status: "DELIVERED",
-        courier: "CJ대한통운",
-        trackingNo: "593988682176",
-        reviewWritten: false,
-        deliveredAt: "2024-08-28",
-      },
-      {
-        id: "item-2",
-        imageUrl:
-          "https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?w=200&q=80",
-        name: "[4천장 돌파✨] 1린카이 배색 세일러카라 집업 롱 원피스",
-        optionText: "네이비(navy) / free",
-        qty: 1,
-        price: 49900,
-        status: "DELIVERED",
-        courier: "CJ대한통운",
-        trackingNo: "593988682176",
-        reviewWritten: true,
-        deliveredAt: "2024-08-28",
-      },
-    ],
-  },
-  {
-    orderId: "20251220-0012345",
-    orderedAt: "2025-12-20",
-    items: [
-      {
-        id: "item-3",
-        imageUrl:
-          "https://images.unsplash.com/photo-1520975661595-6453be3f7070?w=200&q=80",
-        name: "겨울 기모 후드 티셔츠",
-        optionText: "오프화이트 / L",
-        qty: 1,
-        price: 29900,
-        status: "SHIPPING",
-        courier: "CJ대한통운",
-        trackingNo: "123456789012",
-        reviewWritten: false,
-        deliveredAt: null,
-      },
-    ],
-  },
-];
-
 function formatMoney(n) {
-  return n.toLocaleString("ko-KR") + "원";
+  return Number(n || 0).toLocaleString("ko-KR") + "원";
 }
 
 // YYYY-MM-DD 문자열을 Date로 파싱 (간단 버전)
 function toDate(s) {
-  const [y, m, d] = s.split("-").map(Number);
+  const [y, m, d] = String(s).split("-").map(Number);
   return new Date(y, m - 1, d);
 }
 
-function isWithinRange(dateStr, fromStr, toStr) {
-  const date = toDate(dateStr);
-  const from = toDate(fromStr);
-  const to = toDate(toStr);
-  // to는 그날 23:59:59까지 포함시키려고 +1일 처리(간단하게)
-  const toEnd = new Date(to.getTime() + 24 * 60 * 60 * 1000 - 1);
-  return date >= from && date <= toEnd;
-}
-
 export default function OrderList() {
-  // ✅ 기본값: 최근 3개월 느낌으로 잡기(더미)
   const [status, setStatus] = useState("ALL");
   const [fromDate, setFromDate] = useState("2024-05-06");
   const [toDateStr, setToDateStr] = useState("2025-12-26");
 
-  // 조회 버튼을 눌렀을 때만 목록을 갱신하고 싶으면:
-  // filters 상태와 appliedFilters 상태를 분리하는데,
-  // 지금은 간단하게 바로 필터링되게 처리(원하면 분리해줄게)
-  const filteredOrders = useMemo(() => {
-    return DUMMY_ORDERS.map((order) => {
-      // 기간 필터(주문일자 기준)
-      const okRange = isWithinRange(order.orderedAt, fromDate, toDateStr);
-      if (!okRange) return null;
+  // ✅ 서버에서 받은 주문 목록
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
-      // 상태 필터는 "상품 상태" 기준으로 걸어주기(현업 느낌)
-      const items =
-        status === "ALL"
-          ? order.items
-          : order.items.filter((it) => it.status === status);
+  // ✅ 구매후기 모달 상태
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
-      if (items.length === 0) return null;
+  const openReviewModal = (order, item) => {
+    setSelectedItem({
+      orderId: order.orderId,
+      orderedAt: order.orderedAt,
+      orderItemId: item.id,
+      productName: item.name,
+      optionText: item.optionText,
+      imageUrl: item.imageUrl,
+    });
+    setReviewOpen(true);
+  };
 
-      return { ...order, items };
-    }).filter(Boolean);
-  }, [status, fromDate, toDateStr]);
+  const closeReviewModal = () => {
+    setReviewOpen(false);
+    setSelectedItem(null);
+  };
+
+  const handleSubmitReview = (reviewData) => {
+    console.log("✅ 후기 등록 데이터:", reviewData);
+    alert("후기 등록 완료! (임시)");
+    closeReviewModal();
+  };
+
+  // ✅ 조회 버튼 눌렀을 때만 서버 호출
+  const handleSearch = async () => {
+    try {
+      setLoading(true);
+      setErrorMsg("");
+
+      const data = await getOrders();
+
+      setOrders(Array.isArray(data) ? data : []);
+    } catch (e) {
+      const msg = e?.normalized?.message || "주문목록을 불러오지 못했어.";
+      setErrorMsg(msg);
+      setOrders([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(()=> {
+    handleSearch();
+  }, []);
 
   const handleQuickRange = (days) => {
-    // 오늘 기준으로 from/to 자동 세팅
     const today = new Date();
     const to = today;
     const from = new Date(today.getTime() - days * 24 * 60 * 60 * 1000);
@@ -143,7 +103,6 @@ export default function OrderList() {
   };
 
   const openTracking = (courier, trackingNo) => {
-    // ✅ 실제로는 택배사별 링크가 다름(나중에 매핑하면 됨)
     alert(`${courier}\n운송장: ${trackingNo}\n(여긴 나중에 링크로 연결)`);
   };
 
@@ -151,7 +110,7 @@ export default function OrderList() {
   const canReview = (item) =>
     item.status === "DELIVERED" && item.reviewWritten === false;
 
-  // 교환/반품은 “배송완료 + 7일 이내” 같은 조건이 흔함
+  // 교환/반품: 배송완료 + 7일 이내(프론트 표시용)
   const canReturn = (item) => {
     if (item.status !== "DELIVERED") return false;
     if (!item.deliveredAt) return false;
@@ -179,7 +138,6 @@ export default function OrderList() {
               </option>
             ))}
           </select>
-
 
           <div className={styles.quickBtns}>
             {QUICK_RANGES.map((r) => (
@@ -210,10 +168,19 @@ export default function OrderList() {
             />
           </div>
         </div>
-        <button className={styles.searchBtn} type="button">
-          조회
+
+        <button
+          className={styles.searchBtn}
+          type="button"
+          onClick={handleSearch}
+          disabled={loading}
+        >
+          {loading ? "조회중..." : "조회"}
         </button>
       </div>
+
+      {/* 에러 메시지 */}
+      {errorMsg && <div className={styles.error}>{errorMsg}</div>}
 
       {/* 안내 문구 */}
       <ul className={styles.notice}>
@@ -234,12 +201,12 @@ export default function OrderList() {
           <div className={styles.colAction}>취소/교환/반품</div>
         </div>
 
-        {filteredOrders.length === 0 ? (
+        {orders.length === 0 ? (
           <div className={styles.empty}>조회된 주문이 없습니다.</div>
         ) : (
-          filteredOrders.map((order) => (
+          orders.map((order) => (
             <div key={order.orderId} className={styles.orderGroup}>
-              {/* 왼쪽 주문정보(주문일자/주문번호) - 주문 묶음 느낌 */}
+              {/* 왼쪽 주문정보 */}
               <div className={styles.orderMeta}>
                 <div className={styles.orderDate}>{order.orderedAt}</div>
                 <button
@@ -253,7 +220,7 @@ export default function OrderList() {
 
               {/* 오른쪽 상품들 */}
               <div className={styles.orderItems}>
-                {order.items.map((it) => (
+                {(order.items || []).map((it) => (
                   <div key={it.id} className={styles.itemRow}>
                     <div className={styles.colImg}>
                       <img
@@ -265,7 +232,9 @@ export default function OrderList() {
 
                     <div className={styles.colInfo}>
                       <div className={styles.itemName}>{it.name}</div>
-                      <div className={styles.itemOption}>[옵션: {it.optionText}]</div>
+                      <div className={styles.itemOption}>
+                        [옵션: {it.optionText}]
+                      </div>
 
                       <div className={styles.itemSubActions}>
                         <button
@@ -280,7 +249,7 @@ export default function OrderList() {
                           <button
                             type="button"
                             className={styles.darkBtn}
-                            onClick={() => alert("구매후기 작성(나중에 연결)")}
+                            onClick={() => openReviewModal(order, it)}
                           >
                             구매후기
                           </button>
@@ -292,7 +261,10 @@ export default function OrderList() {
                     <div className={styles.colPrice}>{formatMoney(it.price)}</div>
 
                     <div className={styles.colStatus}>
-                      <div className={styles.statusText}>{statusLabel(it.status)}</div>
+                      <div className={styles.statusText}>
+                        {statusLabel(it.status)}
+                      </div>
+
                       {it.courier && it.trackingNo && (
                         <button
                           type="button"
@@ -332,6 +304,14 @@ export default function OrderList() {
           ))
         )}
       </div>
+
+      {/* ✅ 후기 모달 */}
+      <ReviewModal
+        open={reviewOpen}
+        item={selectedItem}
+        onClose={closeReviewModal}
+        onSubmit={handleSubmitReview}
+      />
     </div>
   );
 }
