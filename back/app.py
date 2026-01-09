@@ -8,6 +8,7 @@ from petShop.models import db, User, Address, Product, Question, Answer, Cart, O
 
 # Blueprint Imports
 from petShop.views.cart import cart_bp
+from petShop.views.order import order_bp
 from petShop.views.product import product_bp
 from petShop.views.review import review_bp
 from petShop.views.wishlist import bp as wishlist_bp
@@ -17,7 +18,12 @@ from petShop.views.auth import bp as auth_bp
 from petShop.views.event import event_bp
 =======
 from petShop.views.newpost import post_bp
+<<<<<<< HEAD
 >>>>>>> 6bde93c2e91dffc611d88090c1a083bec45f7f21
+=======
+from petShop.views.event import event_bp
+from petShop.views.chat import chat_bp
+>>>>>>> ca0d4aed4891690f38c174feb28b7b555157aa6d
 
 migrate = Migrate()
 jwt = JWTManager() # ✅ 전역 객체 생성
@@ -78,6 +84,7 @@ def create_app():
     def index():
         return "Petshop API OK"
 
+<<<<<<< HEAD
     @app.post("/api/chat")
     def chat():
         data = request.get_json(silent=True) or {}
@@ -148,6 +155,8 @@ def create_app():
 
         return jsonify({"suggestions": suggestions})
 
+=======
+>>>>>>> ca0d4aed4891690f38c174feb28b7b555157aa6d
     # =========================
     # 6. 블루프린트 등록
     # =========================
@@ -161,8 +170,14 @@ def create_app():
     app.register_blueprint(event_bp)
 =======
     app.register_blueprint(post_bp)
+<<<<<<< HEAD
 >>>>>>> 6bde93c2e91dffc611d88090c1a083bec45f7f21
 
+=======
+    app.register_blueprint(event_bp)
+    app.register_blueprint(chat_bp)
+    app.register_blueprint(order_bp)
+>>>>>>> ca0d4aed4891690f38c174feb28b7b555157aa6d
     return app
 
 app = create_app()

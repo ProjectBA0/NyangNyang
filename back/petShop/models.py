@@ -157,20 +157,33 @@ class Question(db.Model):
 
     def to_dict(self):
         # ✅ 이벤트인 경우 기간을, 일반 게시글인 경우 생성일을 'date' 키로 반환
+<<<<<<< HEAD
         display_date = f"{self.start_date} ~ {self.end_date}" if self.start_date else self.created_date.strftime("%Y-%m-%d")
         
+=======
+        display_date = f"{self.start_date} ~ {self.end_date}" if self.start_date else self.created_date.strftime(
+            "%Y-%m-%d")
+
+>>>>>>> ca0d4aed4891690f38c174feb28b7b555157aa6d
         return {
             "id": self.id,
             "title": self.title,
             "content": self.content,
             "category": self.category,
             "writer": self.user.nickname if self.user else "알수없음",
+<<<<<<< HEAD
             "date": display_date, # ✅ 프론트엔드 호환성 유지
+=======
+            "date": display_date,  # ✅ 프론트엔드 호환성 유지
+>>>>>>> ca0d4aed4891690f38c174feb28b7b555157aa6d
             "img_url": self.img_url,
             "start_date": self.start_date,
             "end_date": self.end_date
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> ca0d4aed4891690f38c174feb28b7b555157aa6d
 
 class Answer(db.Model):
     """
