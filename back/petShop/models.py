@@ -388,7 +388,7 @@ class Wishlist(db.Model):
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 # ==============================================================================
-# [Gemini 작업 로그] - 26-01-04
+# [작업 로그] - 26-01-04
 # 1. Wishlist 모델 추가: User-Product N:M 관계.
 # 2. 게시판 통합: Event 테이블을 Question 테이블로 통합.
 #    - Question 모델에 start_date, end_date 필드 추가.
