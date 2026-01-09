@@ -13,7 +13,11 @@ from petShop.views.review import review_bp
 from petShop.views.wishlist import bp as wishlist_bp
 from petShop.views.noticeboard import board_bp
 from petShop.views.auth import bp as auth_bp
+<<<<<<< HEAD
 from petShop.views.event import event_bp
+=======
+from petShop.views.newpost import post_bp
+>>>>>>> 6bde93c2e91dffc611d88090c1a083bec45f7f21
 
 migrate = Migrate()
 jwt = JWTManager() # ✅ 전역 객체 생성
@@ -24,6 +28,15 @@ def create_app():
     # =========================
     # 1. 기본 시크릿 설정
     # =========================
+
+    UPLOAD_ROOT = os.path.join("static", "uploads")
+    REVIEW_DIR = os.path.join(UPLOAD_ROOT, "review")
+    os.makedirs(REVIEW_DIR, exist_ok=True)
+
+    app.config["UPLOAD_ROOT"] =UPLOAD_ROOT
+    app.config["UPLOAD_FOLDER_REVIEW"]=REVIEW_DIR
+    app.config["MAX_CONTENT_LENGTH"] = 5*1024*1024
+
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev_secret_key")
     app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "dev_jwt_secret_key")
 
@@ -144,7 +157,11 @@ def create_app():
     app.register_blueprint(review_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(board_bp)
+<<<<<<< HEAD
     app.register_blueprint(event_bp)
+=======
+    app.register_blueprint(post_bp)
+>>>>>>> 6bde93c2e91dffc611d88090c1a083bec45f7f21
 
     return app
 

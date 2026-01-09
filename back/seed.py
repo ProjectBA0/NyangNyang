@@ -38,6 +38,7 @@ with app.app_context():
         password=generate_password_hash("1234"),
         nickname="관리자",
         email="admin@example.com",
+        role="admin",
     )
     user1 = User(
         user_id="user1", password=generate_password_hash("1234"),
@@ -104,9 +105,23 @@ with app.app_context():
         Question(title="회원 탈퇴는 어떻게 하나요?", category="사이트이용", user_id=user1.id, content="사이트 이용을 중단하려고 하는데 탈퇴 메뉴를 못 찾겠습니다. 어디에 있나요?", created_date=datetime(2025, 12, 30)),
         Question(title="아이디 찾기 기능이 안 돼요", category="사이트이용", user_id=user2.id, content="가입한 아이디를 잊어버려서 찾으려고 하는데, 핸드폰 인증 후에도 찾기가 안 됩니다.", created_date=datetime(2025, 12, 31)),
     ]
+<<<<<<< HEAD
     
     db.session.add_all(posts)
     print("📢 통합 게시판(공지/이벤트/Q&A) 상세 데이터 복구 중...")
+=======
+
+    # review1[
+    #     review(
+    #         user_id= "dami",
+    #         content = ""
+    #
+    #     )
+    # ]
+
+    db.session.add_all(question1)
+    print("📢 공지사항 생성 완료")
+>>>>>>> 6bde93c2e91dffc611d88090c1a083bec45f7f21
 
     # =========================================================
     # 3️⃣ JSON 파일 순회 → Product 생성

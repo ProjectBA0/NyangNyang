@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* PostForm.module.css */
 
 .page {
@@ -7,9 +8,19 @@
   justify-content: center;
   padding: 80px 0;
   background-color: #fcfdfe;
+=======
+:root {
+  --border-color: #dcdcdc;
+  --bg-gray: #f7f7f7;
+  --text-gray: #666;
+  --main-blue: #9bbce6;
+  --main-blue-dark: #86acd9;
+>>>>>>> 6bde93c2e91dffc611d88090c1a083bec45f7f21
 }
 
+/* 전체 래퍼 */
 .container {
+<<<<<<< HEAD
   width: 1000px;
   padding: 60px;
   background: #ffffff;
@@ -53,6 +64,46 @@
   border-radius: 12px;
   border: 2px solid #E8EEF8;
   font-size: 1rem;
+=======
+  max-width: 900px;
+  margin: 40px auto;
+  background: #fff;
+  border: 1px solid var(--border-color);
+  font-size: 14px;
+  color: #333;
+}
+
+/* 상단 안내 박스 */
+.notice {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-color);
+  background: #fafafa;
+  font-size: 13px;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* 폼 전체 */
+.form {
+  padding: 0;
+}
+
+/* 한 줄 단위 */
+.row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* 왼쪽 라벨 */
+.row label {
+  width: 140px;
+  padding: 14px;
+  background: var(--bg-gray);
+  border-right: 1px solid var(--border-color);
+  font-weight: bold;
+  color: #444;
+>>>>>>> 6bde93c2e91dffc611d88090c1a083bec45f7f21
   box-sizing: border-box;
   transition: all 0.3s ease;
   background-color: #fcfdfe;
@@ -66,6 +117,7 @@
   box-shadow: 0 0 0 4px rgba(187, 210, 230, 0.2);
 }
 
+<<<<<<< HEAD
 .field textarea {
   resize: vertical;
   min-height: 300px;
@@ -85,6 +137,101 @@
 .field input[type="file"]:hover {
   background: #f1f3f5;
   border-color: #BBD2E6;
+=======
+/* 기본 input */
+.row input[type="text"] {
+  flex: 1;
+  padding: 10px 12px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+}
+
+/* 🔴 이메일 라인 */
+.emailLine {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  padding: 0 12px;
+  gap: 6px;
+}
+
+.emailLine input {
+  width: 180px;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  font-size: 14px;
+}
+
+.emailLine span {
+  font-size: 14px;
+}
+
+.emailLine select {
+  height: 34px;
+  border: 1px solid var(--border-color);
+  font-size: 14px;
+}
+
+/* 에디터 */
+.editor {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.editor textarea {
+  width: 100%;
+  min-height: 320px;
+  resize: none;
+  border: 1px solid var(--border-color);
+  padding: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+/* 파일 첨부 */
+.row input[type="file"] {
+  padding: 10px 12px;
+  font-size: 13px;
+}
+
+/* 버튼 영역 */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px 0;
+  background: #fafafa;
+}
+
+.actions button {
+  width: 160px;
+  padding: 10px 0;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+}
+
+.actions button[type="submit"] {
+  background: var(--main-blue);
+  border: none;
+  color: #fff;
+  font-weight: bold;
+}
+
+.actions button[type="submit"]:hover {
+  background: var(--main-blue-dark);
+}
+
+.actions button[type="button"] {
+  background: #fff;
+}
+
+.actions button[type="button"]:hover {
+  background: #f0f0f0;
+>>>>>>> 6bde93c2e91dffc611d88090c1a083bec45f7f21
 }
 
 /* 버튼 영역 */

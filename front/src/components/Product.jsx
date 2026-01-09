@@ -1,11 +1,11 @@
-import React, { useMemo } from 'react'
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from 'react'
 import { Container, Spinner, Alert, Pagination } from 'react-bootstrap';
 import { useNavigate, useParams } from "react-router-dom";
 
 import styles from "./Product.module.css";
 import { fetchProductDetail, fetchReviews } from "../api/productApi";
 import { fetchMyCart, addCart, updateCart } from "../api/cartApi";
+import { formatDate } from '../constants/date';
 
 const Product = () => {
     const { id } = useParams();
@@ -56,7 +56,6 @@ const Product = () => {
             try {
                 const data = await fetchProductDetail(id);
                 // 안전 처리 (없으면 기본값)
-                // ***** models에 category랑 sub_category 차이 물어보고 같으면 빼기 *****
                 setProduct({
                     id: data?.id ?? Number(id), // 서버가 id주면 그 값을, 안 주면 url에 id를 숫자로 써라
                     title: data?.title ?? "",
@@ -89,6 +88,8 @@ const Product = () => {
             alive = false;
         };
     }, [id]);
+
+
 
     // 가격
     const price = Number(product.price)
@@ -320,6 +321,7 @@ const Product = () => {
                                 {reverr}
                             </Alert>
                         )}
+
                         {!reverr && reviews.length === 0 && (
                             <div className="text-center text-muted my-3">
                                 아직 등록된 리뷰가 없습니다.
@@ -328,9 +330,13 @@ const Product = () => {
 
                         {reviews.map((r) => (
                             <div key={r.id}>
-                                <div>{r.writer}</div>
-                                <div>{"★".repeat(r.rating)}</div>
+                                <div>{"⭐".repeat(r.rating)}</div>
+                                <div className={styles.meta}>
+                                    <span className={styles.writer}> {r.writer} </span> | 
+                                    <span className={styles.date}> {formatDate(r.create_date)} </span>
+                                </div>
                                 <div>{r.content}</div>
+                            <hr />
                             </div>
                         ))}
 
