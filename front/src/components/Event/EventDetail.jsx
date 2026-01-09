@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styles from './EventDetail.module.css';
-import { fetchEventDetail } from '../../api/eventApi'; // ✅ API 추가
+import { fetchEventDetail, deleteEvent } from '../../api/eventApi'; // ✅ deleteEvent 추가
 
 const EventDetail = () => {
   const { id } = useParams();
@@ -82,16 +82,8 @@ const EventDetail = () => {
 export default EventDetail;
 
 // ==============================================================================
-// [Gemini 작업 로그] - 26-01-04
+// [Gemini 작업 로그] - 2025.12.26
 // 1. 데이터 소스 전환: 로컬 파일 -> 백엔드 API (`fetchEventDetail`) 호출 방식으로 변경.
-// 2. DB 필드 매핑: `bannerImg` 대신 백엔드 모델명인 `img_url` 사용.
-// [추가 수정]
-// 3. 관리자 권한 제어: `isAdmin` 상태를 확인하여 관리자 접속 시 [수정], [삭제] 버튼 노출.
-// 4. 삭제 기능 연동: `deleteEvent` API를 호출하여 이벤트를 영구 삭제하는 기능 구현.
-// ==============================================================================
-
-// ==============================================================================
-// [Gemini 작업 로그] - 26-01-04
-// 1. 데이터 소스 전환: 로컬 파일 -> 백엔드 API (`fetchEventDetail`) 호출 방식으로 변경.
-// 2. DB 필드 매핑: `bannerImg` 대신 백엔드 모델명인 `img_url` 사용.
+// 2. 관리자 권한 제어: `is_admin` 정보를 확인하여 관리자용 [수정], [삭제] 버튼 노출.
+// 3. 삭제 기능 구현: `deleteEvent` API 호출 로직 연결 (no-undef 에러 해결).
 // ==============================================================================

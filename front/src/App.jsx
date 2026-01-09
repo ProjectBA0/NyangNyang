@@ -41,6 +41,7 @@ import Noticeboard from "./components/Noticeboard";
  import NoticeDetail from "./components/NoticeDetail";
  import EditPost from "./components/EditPost";
 import Order from "./components/Order";
+import AdminPostForm from "./components/AdminPostForm";
 
 
 /** ✅ 네비바가 필요한 페이지들의 공통 틀 */
@@ -83,7 +84,10 @@ export default function App() {
           <Route path="/Noticeboard/:id" element={<NoticeDetail />} />
           <Route path="/Noticeboard/edit/:id" element={<EditPost />} /> 
           <Route path="/order" element={<Order />} />
+
+          <Route path="/AdminPostForm" element={<AdminPostForm />} />
           <Route path="/view" element={<Recent />} />
+
 
           {/* ✅ 마이페이지 */}
           <Route path="mypage" element={<MyPageLayout />}>
@@ -91,7 +95,6 @@ export default function App() {
 
             <Route path="shopping/orders" element={<OrderList />} />
             <Route path="shopping/returns" element={<ReturnCancel />} />
-            {/* <Route path="shopping/wishlist" element={<WishList />} /> */}
 
             <Route path="shopping/wishlist" element={<WishlistPage />} /> {/* 찜목록 (마이페이지) */}
 
@@ -111,6 +114,7 @@ export default function App() {
       </Routes>
     </div>
   );
+<<<<<<< HEAD
 }
 
 
@@ -123,3 +127,6 @@ export default function App() {
 // [추가 수정]
 // 3. 라우팅 추가: `/events/:id` (이벤트 상세 페이지) 등록 및 `EventDetail` 컴포넌트 임포트.
 // ==============================================================================
+=======
+}
+>>>>>>> 6bde93c2e91dffc611d88090c1a083bec45f7f21

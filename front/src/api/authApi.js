@@ -39,3 +39,20 @@ export async function checkUserId(userId) {
   return res.data; // { ok: true/false, msg: "..." }
 }
 //회원정보 검증 api
+
+// 내 정보 가져오기
+export async function fetchMe() {
+  const res = await client.get("/api/auth/me");
+  return res.data; // { user_id, nickname, email, phone, address }
+}
+
+/**
+ * 회원탈퇴
+ */
+export const withdraw = ({ password, reason, reasonEtc }) => {
+  return client.post("/api/auth/withdraw", {
+    password,
+    reason,
+    reasonEtc,
+  });
+};
